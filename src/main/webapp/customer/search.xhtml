@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="page" value="#{customerBean.page}"/>
+		<f:event type="preRenderView" listener="#{customerBean.paginate}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Search Customer entities"/>
+
+	<ui:define name="header">
+		#{msgCus['header.search']}
+	</ui:define>
+
+	<ui:define name="subheader">
+		#{msgCus['search.entities']}
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="search">
+			<f:validateBean disabled="true">
+				<h:panelGroup styleClass="search">
+
+					<h:panelGrid columnClasses="label,component,required" columns="3">
+						<h:outputLabel for="customerBeanExampleName" value="#{msgCus.name}:"/>
+						<h:panelGroup>
+							<h:inputText id="customerBeanExampleName" value="#{customerBean.example.name}"/>
+							<h:message for="customerBeanExampleName" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="customerBeanExampleDescription" value="#{msgCus.description}:"/>
+						<h:panelGroup>
+							<h:inputText id="customerBeanExampleDescription" value="#{customerBean.example.description}"/>
+							<h:message for="customerBeanExampleDescription" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="customerBeanExampleTelephone" value="#{msgCus.telephone}:"/>
+						<h:panelGroup>
+							<h:inputText id="customerBeanExampleTelephone" value="#{customerBean.example.telephone}"/>
+							<h:message for="customerBeanExampleTelephone" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+					</h:panelGrid>
+					<h:panelGroup styleClass="buttons">
+						<h:commandLink value="#{msg.search}" action="#{customerBean.search}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg.create_new}" action="#{customerBean.create}" styleClass="btn btn-primary"/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</f:validateBean>
+			
+			<h:dataTable id="customerBeanPageItems" styleClass="data-table" value="#{customerBean.pageItems}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msgCus.name}"/>
+					</f:facet>
+					<h:link outcome="/customer/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemName" value="#{_item.name}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msgCus.description}"/>
+					</f:facet>
+					<h:link outcome="/customer/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemDescription" value="#{_item.description}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msgCus.telephone}"/>
+					</f:facet>
+					<h:link outcome="/customer/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemTelephone" value="#{_item.telephone}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<ui:include src="/resources/scaffold/paginator.xhtml">
+				<ui:param name="paginatorBean" value="#{customerBean}"/>
+			</ui:include>
+		</h:form>
+			
+	</ui:define>
+
+</ui:composition>

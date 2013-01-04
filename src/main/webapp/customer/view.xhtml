@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{customerBean.id}"/>
+		<f:event type="preRenderView" listener="#{customerBean.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="View Customer"/>
+
+	<ui:define name="header">
+		#{msgCus['header.view']}
+	</ui:define>
+
+	<ui:define name="subheader">
+		View existing Customer
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="customerBeanCustomerName" value="#{msgCus.name}:"/>
+			<h:outputText id="customerBeanCustomerName" value="#{customerBean.customer.name}"/>
+			<h:outputText/>
+			<h:outputLabel for="customerBeanCustomerDescription" value="#{msgCus.description}:"/>
+			<h:outputText id="customerBeanCustomerDescription" value="#{customerBean.customer.description}"/>
+			<h:outputText/>
+			<h:outputLabel for="customerBeanCustomerTelephone" value="#{msgCus.telephone}:"/>
+			<h:outputText id="customerBeanCustomerTelephone" value="#{customerBean.customer.telephone}"/>
+			<h:outputText/>
+			<h:outputLabel for="customerBeanCustomerPrices" value="#{msg.prices}:"/>
+			<h:dataTable id="customerBeanCustomerPrices" styleClass="data-table" value="#{forgeview:asList(customerBean.customer.prices)}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg.product}"/>
+					</f:facet>
+					<h:link outcome="/customerPrice/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemProduct" value="#{_item.product}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg.customer}"/>
+					</f:facet>
+					<h:link outcome="/customerPrice/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemCustomer" value="#{_item.customer}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="#{msg.view_all}" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="#{msg.edit}" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="#{msg.create_new}" outcome="create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="page" value="#{customerPriceBean.page}"/>
+		<f:event type="preRenderView" listener="#{customerPriceBean.paginate}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="#{msg.search} Customer Price entities"/>
+
+	<ui:define name="header">
+		#{msgCP['header.search']}
+	</ui:define>
+
+	<ui:define name="subheader">
+		#{msgPro['search.entities']}
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="search">
+			<f:validateBean disabled="true">
+				<h:panelGroup styleClass="search">
+
+					<h:panelGrid columnClasses="label,component,required" columns="3">
+						<h:outputLabel for="customerPriceBeanExampleProduct" value="#{msg.product}:"/>
+						<h:panelGroup>
+							<h:selectOneMenu converter="#{productBean.converter}" id="customerPriceBeanExampleProduct" value="#{customerPriceBean.example.product}">
+								<f:selectItem/>
+								<f:selectItems value="#{productBean.all}"/>
+							</h:selectOneMenu>
+							<h:message for="customerPriceBeanExampleProduct" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="customerPriceBeanExampleCustomer" value="#{msg.customer}:"/>
+						<h:panelGroup>
+							<h:selectOneMenu converter="#{customerBean.converter}" id="customerPriceBeanExampleCustomer" value="#{customerPriceBean.example.customer}">
+								<f:selectItem/>
+								<f:selectItems value="#{customerBean.all}"/>
+							</h:selectOneMenu>
+							<h:message for="customerPriceBeanExampleCustomer" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+					</h:panelGrid>
+					<h:panelGroup styleClass="buttons">
+						<h:commandLink value="#{msg.search}" action="#{customerPriceBean.search}" styleClass="btn btn-primary"/>
+						<h:commandLink value="#{msg.create_new}" action="#{customerPriceBean.create}" styleClass="btn btn-primary"/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</f:validateBean>
+			
+			<h:dataTable id="customerPriceBeanPageItems" styleClass="data-table" value="#{customerPriceBean.pageItems}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg.product}"/>
+					</f:facet>
+					<h:link outcome="/customerPrice/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemProduct" value="#{_item.product}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msg.customer}"/>
+					</f:facet>
+					<h:link outcome="/customerPrice/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemCustomer" value="#{_item.customer}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<ui:include src="/resources/scaffold/paginator.xhtml">
+				<ui:param name="paginatorBean" value="#{customerPriceBean}"/>
+			</ui:include>
+		</h:form>
+			
+	</ui:define>
+
+</ui:composition>

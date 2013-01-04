@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<configuration>
+<org>
+<jboss>
+<forge>
+<scaffold>
+<faces>
+<FacesScaffold_targetDir>/</FacesScaffold_targetDir>
+</faces>
+</scaffold>
+</forge>
+</jboss>
+</org>
+<jboss-as>
+<as7>
+<configured>PROJECT</configured>
+<jboss-home>C:\Documents and Settings\Administrateur.TOSHIBA-7BA50F3\Bureau\jboss-as-7.1.1.Final</jboss-home>
+</as7>
+</jboss-as>
+</configuration>
