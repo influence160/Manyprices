@@ -1,4 +1,4 @@
-package org.ott.manyprices.test;
+package com.ott.manyprices.test;
 
 public class CategoryTest {
 
