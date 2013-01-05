@@ -35,30 +35,40 @@
 			<h:outputLabel for="customerBeanCustomerTelephone" value="#{msgCus.telephone}:"/>
 			<h:outputText id="customerBeanCustomerTelephone" value="#{customerBean.customer.telephone}"/>
 			<h:outputText/>
-			<h:outputLabel for="customerBeanCustomerPrices" value="#{msg.prices}:"/>
-			<h:dataTable id="customerBeanCustomerPrices" styleClass="data-table" value="#{forgeview:asList(customerBean.customer.prices)}" var="_item">
+			<h:outputLabel for="customerBeanCustomerPrices" value="#{msgCus.product_list}:"/>
+			<h:outputText/>
+			<h:outputText/>
+		</h:panelGrid>
+
+			<h:dataTable id="customerBeanCustomerPrices" styleClass="data-table data-table-3cols" value="#{forgeview:asList(customerBean.customer.prices)}" var="_item">
 				<h:column>
 					<f:facet name="header">
 						<h:outputText value="#{msg.product}"/>
 					</f:facet>
 					<h:link outcome="/customerPrice/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemProduct" value="#{_item.product}"/>
+						<h:outputText id="itemProduct" value="#{_item.product.name}"/>
 					</h:link>
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="#{msg.customer}"/>
+						<h:outputText value="#{msg.price}"/>
 					</f:facet>
 					<h:link outcome="/customerPrice/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemCustomer" value="#{_item.customer}"/>
+						<h:outputText id="itemPrice" value="#{_item.price}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msgCP.date_updated}"/>
+					</f:facet>
+					<h:link outcome="/customerPrice/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemDateUpdated" value="#{_item.dateUpdated}"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>
-			<h:outputText/>
-		</h:panelGrid>
-
 		<div class="buttons">
 			<h:link value="#{msg.view_all}" outcome="search" styleClass="btn btn-primary"/> 
 			<h:link value="#{msg.edit}" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>

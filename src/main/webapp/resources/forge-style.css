@@ -339,6 +339,10 @@ footer p {
 	padding-bottom: 2px;
 }
 
+#content .data-table-3cols thead th, #content .data-table-3cols tbody td, #content .data-table-3cols tfoot td {
+	width: 33%;
+}
+
 #content .data-table tfoot td {
 	padding-right: 4px;
 }

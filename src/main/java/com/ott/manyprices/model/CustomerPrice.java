@@ -1,6 +1,7 @@
 package com.ott.manyprices.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.AssociationOverride;
 import javax.persistence.AssociationOverrides;
@@ -13,6 +14,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -30,7 +33,14 @@ public class CustomerPrice implements Serializable {
 	private @Column(name = "version")
 	int version = 0;
 	private float price;
-
+    private Date dateUpdated;
+    
+    @PreUpdate
+    @PrePersist
+    private void prePersist()
+    {
+       dateUpdated = new Date();
+    }
 	public CustomerPriceId getId() {
 		return id;
 	}
@@ -53,6 +63,14 @@ public class CustomerPrice implements Serializable {
 
 	public void setPrice(float price) {
 		this.price = price;
+	}
+
+	public Date getDateUpdated() {
+		return dateUpdated;
+	}
+
+	public void setDateUpdated(Date dateUpdated) {
+		this.dateUpdated = dateUpdated;
 	}
 
 	@NotNull

@@ -48,7 +48,7 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="#{msg.product}"/>
+						<h:outputText value="#{msg.price}"/>
 					</f:facet>
 					<h:link outcome="/customerPrice/view">
 						<f:param name="id" value="#{_item.id}"/>
@@ -58,7 +58,7 @@
 			</h:dataTable>
 			<h:outputText/>
 			<h:outputLabel for="productBeanProductCategory" value="#{msg.category}:"/>
-			<h:link id="productBeanProductCategory" outcome="/category/view" value="#{productBean.product.category}">
+			<h:link id="productBeanProductCategory" outcome="/category/view" value="#{productBean.product.category.name}">
 				<f:param name="id" value="#{productBean.product.category.id}"/>
 			</h:link>
 			<h:outputText/>
@@ -66,6 +66,9 @@
 			<h:outputText id="productBeanProductDateUpdated" value="#{productBean.product.dateUpdated}">
 				<f:convertDateTime/>
 			</h:outputText>
+			<h:outputText/>
+			<h:outputLabel for="productBeanProductNote" value="#{msgPro.note}:"/>
+			<h:outputText id="productBeanProductNote" value="#{productBean.product.note}"/>
 			<h:outputText/>
 		</h:panelGrid>
 

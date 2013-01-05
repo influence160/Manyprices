@@ -24,8 +24,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.ott.manyprices.model.CustomerPrice;
 import com.ott.manyprices.model.Customer;
+import com.ott.manyprices.model.CustomerPrice;
 import com.ott.manyprices.model.Product;
 
 /**
@@ -107,7 +107,9 @@ public class CustomerPriceBean implements Serializable
 
    public CustomerPrice findById(Long id)
    {
-
+//	  return (CustomerPrice) entityManager.createQuery("SELECT UNIQUE cp from CustomerPrice cp " +
+//	   		" JOIN cp.id.customer" +
+//	   		" JOIN cp.id.product").getSingleResult();
       return this.entityManager.find(CustomerPrice.class, id);
    }
 

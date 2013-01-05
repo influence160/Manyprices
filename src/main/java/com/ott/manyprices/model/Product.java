@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
+import javax.validation.constraints.Size;
 
 import java.lang.Override;
 import java.util.Date;
@@ -39,6 +40,9 @@ public class Product implements Serializable
    @ManyToOne(fetch = FetchType.LAZY)
    private Category category;
    private Date dateUpdated;
+   @Column(length=1024)
+   @Size(max=1024)
+   private String note;
 
    @PreUpdate
    @PrePersist
@@ -120,6 +124,16 @@ public class Product implements Serializable
    public Date getDateUpdated()
    {
       return dateUpdated;
+   }
+   
+   
+
+   public String getNote() {
+	  return note;
+   }
+
+   public void setNote(String note) {
+	  this.note = note;
    }
 
    public String toString()

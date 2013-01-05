@@ -29,12 +29,12 @@
 			<h:outputText id="customerPriceBeanCustomerPricePrice" value="#{customerPriceBean.customerPrice.price}"/>
 			<h:outputText/>
 			<h:outputLabel for="customerPriceBeanCustomerPriceProduct" value="#{msg.product}:"/>
-			<h:link id="customerPriceBeanCustomerPriceProduct" outcome="/product/view" value="#{customerPriceBean.customerPrice.product}">
+			<h:link id="customerPriceBeanCustomerPriceProduct" outcome="/product/view" value="#{customerPriceBean.customerPrice.product.name}">
 				<f:param name="id" value="#{customerPriceBean.customerPrice.product.name}"/>
 			</h:link>
 			<h:outputText/>
 			<h:outputLabel for="customerPriceBeanCustomerPriceCustomer" value="#{msg.customer}:"/>
-			<h:link id="customerPriceBeanCustomerPriceCustomer" outcome="/customer/view" value="#{customerPriceBean.customerPrice.customer}">
+			<h:link id="customerPriceBeanCustomerPriceCustomer" outcome="/customer/view" value="#{customerPriceBean.customerPrice.customer.name}">
 				<f:param name="id" value="#{customerPriceBean.customerPrice.customer.name}"/>
 			</h:link>
 			<h:outputText/>

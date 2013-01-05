@@ -72,7 +72,7 @@
 							</f:facet>
 							<h:link outcome="/customerPrice/view">
 								<f:param name="id" value="#{_item.id}"/>
-								<h:outputText id="itemCustomer" value="#{_item.customer}"/>
+								<h:outputText id="itemCustomer" value="#{_item.customer.name}"/>
 							</h:link>
 							<f:facet name="footer">
 								<h:selectOneMenu converter="#{customerBean.converter}" id="customerPriceBeanAddCustomer" value="#{customerPriceBean.add.customer}">
@@ -109,9 +109,15 @@
 				<h:panelGroup>
 					<h:selectOneMenu converter="#{categoryBean.converter}" id="productBeanProductCategory" value="#{productBean.product.category}">
 						<f:selectItem/>
-						<f:selectItems value="#{categoryBean.all}"/>
+						<f:selectItems value="#{categoryBean.all}" var="_category" itemLabel="#{_category.name}"/>
 					</h:selectOneMenu>
 					<h:message for="productBeanProductCategory" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="productBeanProductNote" value="#{msgPro.note}:"/>
+				<h:panelGroup>
+					<h:inputTextarea id="productBeanProductNote" value="#{productBean.product.note}"/>
+					<h:message for="productBeanProductNote" styleClass="error"/>
 				</h:panelGroup>
 				<h:outputText/>
 <!-- 				<h:outputLabel for="productBeanProductDateUpdated" value="Date Updated:"/> -->

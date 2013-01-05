@@ -799,9 +799,12 @@ input[type="color"],
   color: #555555;
 }
 
-input,
-textarea {
+input{
   width: 210px;
+}
+
+textarea {
+  width: 100%;
 }
 
 textarea {
