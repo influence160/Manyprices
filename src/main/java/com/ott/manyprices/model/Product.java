@@ -19,6 +19,7 @@ import javax.validation.constraints.Size;
 import java.lang.Override;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @Entity
@@ -134,6 +135,20 @@ public class Product implements Serializable
 
    public void setNote(String note) {
 	  this.note = note;
+   }
+   
+   public float getMinPrice(){
+	   if(prices == null || prices.isEmpty()){
+		   return 0;
+	   }
+	   Iterator<CustomerPrice> i = prices.iterator();
+	   float min = i.next().getPrice();
+	   while(i.hasNext()){
+		   CustomerPrice cp = i.next();
+		   if(cp.getPrice() < min)
+			   min = cp.getPrice();
+	   }
+	   return min;
    }
 
    public String toString()
