@@ -26,6 +26,7 @@ import javax.persistence.criteria.Root;
 
 import com.ott.manyprices.model.Customer;
 import com.ott.manyprices.model.CustomerPrice;
+import com.ott.manyprices.model.CustomerPriceId;
 import com.ott.manyprices.model.Product;
 
 /**
@@ -49,15 +50,33 @@ public class CustomerPriceBean implements Serializable
    /*
     * Support creating and retrieving CustomerPrice entities
     */
-
-   private Long id;
-
-   public Long getId()
-   {
-      return this.id;
+   private Long productId;
+   private Long customerId;
+   private CustomerPriceId id;
+   
+   public Long getProductId() {
+	   return productId;
    }
 
-   public void setId(Long id)
+   public void setProductId(Long productId) {
+	   this.productId = productId;
+   }
+
+   public Long getCustomerId() {
+	   return customerId;
+   }
+
+   public void setCustomerId(Long customerId) {
+     	this.customerId = customerId;
+   }
+
+   public CustomerPriceId getId()
+   {
+	   id = new CustomerPriceId(getProductId(), getCustomerId());
+       return id;
+   }
+
+   public void setId(CustomerPriceId id)
    {
       this.id = id;
    }
@@ -95,7 +114,7 @@ public class CustomerPriceBean implements Serializable
          this.conversation.begin();
       }
 
-      if (this.id == null)
+      if (this.getId() == null)
       {
          this.customerPrice = this.example;
       }
@@ -105,12 +124,15 @@ public class CustomerPriceBean implements Serializable
       }
    }
 
-   public CustomerPrice findById(Long id)
+   public CustomerPrice findById(CustomerPriceId id)
    {
-//	  return (CustomerPrice) entityManager.createQuery("SELECT UNIQUE cp from CustomerPrice cp " +
-//	   		" JOIN cp.id.customer" +
-//	   		" JOIN cp.id.product").getSingleResult();
-      return this.entityManager.find(CustomerPrice.class, id);
+	  return (CustomerPrice) entityManager.createQuery("SELECT cp FROM CustomerPrice cp " +
+	   		" LEFT JOIN FETCH cp.id.customer" +
+	   		" LEFT JOIN FETCH cp.id.product" +
+	   		" WHERE cp.id=:id")
+	   		.setParameter("id", id)
+	   		.getSingleResult();
+//      return this.entityManager.find(CustomerPrice.class, id);
    }
 
    /*
@@ -275,8 +297,10 @@ public class CustomerPriceBean implements Serializable
          @Override
          public Object getAsObject(FacesContext context, UIComponent component, String value)
          {
-
-            return ejbProxy.findById(Long.valueOf(value));
+        	 String[] ids = value.split("|");
+        	 Long productId = Long.valueOf(ids[0]);
+        	 Long customerId = Long.valueOf(ids[1]);
+             return ejbProxy.findById(new CustomerPriceId(productId, customerId));
          }
 
          @Override
@@ -287,8 +311,8 @@ public class CustomerPriceBean implements Serializable
             {
                return "";
             }
-
-            return String.valueOf(((CustomerPrice) value).getId());
+            CustomerPrice cp = (CustomerPrice) value;
+            return String.valueOf(cp.getProduct().getId()) + "|" + String.valueOf(cp.getCustomer().getId());
          }
       };
    }

@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
@@ -36,6 +37,8 @@ public class Product implements Serializable
    private String name;
    private String dimention;
    private String description;
+   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
+   private ProductPrice purchasePrice;
    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id.product")
    private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
    @ManyToOne(fetch = FetchType.LAZY)
@@ -44,6 +47,17 @@ public class Product implements Serializable
    @Column(length=1024)
    @Size(max=1024)
    private String note;
+   
+   
+   public Product(){
+	   setPurchasePrice(new ProductPrice());
+   }
+
+   public Product(Long id) {
+	   this();
+	   this.id = id;
+   }
+
 
    @PreUpdate
    @PrePersist
@@ -102,7 +116,24 @@ public class Product implements Serializable
       this.description = description;
    }
 
-   public Set<CustomerPrice> getPrices()
+   public ProductPrice getPurchasePrice() 
+   {
+      return purchasePrice;
+   }
+
+   public void setPurchasePrice(ProductPrice purchasePrice) 
+   {
+	  purchasePrice.setProduct(this);
+	  this.purchasePrice = purchasePrice;
+   }
+   
+   public void setPurchasePrice(CustomerPrice purchasePrice) 
+   {
+	  ProductPrice productPrice = new ProductPrice(purchasePrice);
+	  setPurchasePrice(productPrice);
+   }
+
+   public Set<CustomerPrice> getPrices() 
    {
       return prices;
    }
@@ -126,8 +157,6 @@ public class Product implements Serializable
    {
       return dateUpdated;
    }
-   
-   
 
    public String getNote() {
 	  return note;
@@ -149,6 +178,15 @@ public class Product implements Serializable
 			   min = cp.getPrice();
 	   }
 	   return min;
+   }
+   
+   public Set<Customer> getCurrentSellers(){
+	   Set<Customer> customers = new HashSet<Customer>();
+	   for(CustomerPrice cp : prices){
+		   if(cp.getCustomer() != null)
+			   customers.add(cp.getCustomer());
+	   }
+	   return customers;
    }
 
    public String toString()

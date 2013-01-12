@@ -9,6 +9,8 @@
 
 	<f:metadata>
 		<f:viewParam name="id" value="#{customerPriceBean.id}"/>
+		<f:viewParam name="productId" value="#{customerPriceBean.productId}"/>
+		<f:viewParam name="customerId" value="#{customerPriceBean.customerId}"/>
 		<f:event type="preRenderView" listener="#{customerPriceBean.retrieve}"/>
 	</f:metadata>
 
@@ -16,7 +18,7 @@
 
 	<ui:define name="header">
 		<c:choose>
-			<c:when test="#{!empty categoryBean.id}">
+			<c:when test="#{!empty customerPriceBean.id}">
 				#{msgCP['header.edit']}
 			</c:when>
 			<c:otherwise>
@@ -52,7 +54,7 @@
 				<h:outputLabel for="customerPriceBeanCustomerPriceProduct" value="#{msg.product}:"/>
 				<h:panelGroup>
 					<h:selectOneMenu converter="#{productBean.converter}" id="customerPriceBeanCustomerPriceProduct" required="true" value="#{customerPriceBean.customerPrice.product}">
-						<f:selectItems value="#{productBean.all}"/>
+						<f:selectItems value="#{productBean.all}" var="_product" itemLabel="#{_product.name}"/>
 					</h:selectOneMenu>
 					<h:message for="customerPriceBeanCustomerPriceProduct" styleClass="error"/>
 				</h:panelGroup>
@@ -60,7 +62,7 @@
 				<h:outputLabel for="customerPriceBeanCustomerPriceCustomer" value="#{msg.customer}:"/>
 				<h:panelGroup>
 					<h:selectOneMenu converter="#{customerBean.converter}" id="customerPriceBeanCustomerPriceCustomer" required="true" value="#{customerPriceBean.customerPrice.customer}">
-						<f:selectItems value="#{customerBean.all}"/>
+						<f:selectItems value="#{customerBean.all}" var="_customer" itemLabel="#{_customer.name}"/>
 					</h:selectOneMenu>
 					<h:message for="customerPriceBeanCustomerPriceCustomer" styleClass="error"/>
 				</h:panelGroup>

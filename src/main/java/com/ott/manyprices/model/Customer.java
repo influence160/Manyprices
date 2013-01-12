@@ -36,6 +36,14 @@ public class Customer implements Serializable
    @OneToMany(mappedBy = "id.customer", cascade=CascadeType.ALL)
    private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
 
+   public Customer() {
+
+   }
+   
+   public Customer(Long id) {
+	   this.id = id;
+   }
+
    public Long getId()
    {
       return this.id;

@@ -2,7 +2,9 @@ package com.ott.manyprices.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
@@ -24,6 +26,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.ott.manyprices.model.Customer;
 import com.ott.manyprices.model.Product;
 import com.ott.manyprices.model.Category;
 
@@ -317,4 +320,15 @@ public class ProductBean implements Serializable
       this.add = new Product();
       return added;
    }
+   
+   public List<Customer> getAvailableCustomers()
+   {
+	    Set<Customer> currentSellers =  getProduct().getCurrentSellers();
+	    List<Customer> allCustomers = ((List<Customer>) this.entityManager.createQuery("SELECT c FROM Customer c ")
+			   		.getResultList());
+	    allCustomers.removeAll(currentSellers);
+	    return allCustomers;
+
+   }
+
 }

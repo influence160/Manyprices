@@ -8,6 +8,8 @@
 
 	<f:metadata>
 		<f:viewParam name="id" value="#{customerPriceBean.id}"/>
+		<f:viewParam name="productId" value="#{customerPriceBean.productId}"/>
+		<f:viewParam name="customerId" value="#{customerPriceBean.customerId}"/>
 		<f:event type="preRenderView" listener="#{customerPriceBean.retrieve}"/>
 	</f:metadata>
 

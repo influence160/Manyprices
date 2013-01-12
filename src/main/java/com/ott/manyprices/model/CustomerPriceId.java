@@ -17,6 +17,16 @@ public class CustomerPriceId implements Serializable {
 	@NotNull
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Customer customer;
+	
+	
+
+	public CustomerPriceId() {
+	}
+	
+	public CustomerPriceId(Long productId, Long customerId){
+		product = new Product(productId);
+		customer = new Customer(customerId);
+	}
 
 	public Product getProduct(){
 		return this.product;

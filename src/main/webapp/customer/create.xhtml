@@ -17,7 +17,7 @@
 
 	<ui:define name="header">
 		<c:choose>
-			<c:when test="#{!empty categoryBean.id}">
+			<c:when test="#{!empty customerBean.id}">
 				#{msgCus['header.edit']}
 			</c:when>
 			<c:otherwise>

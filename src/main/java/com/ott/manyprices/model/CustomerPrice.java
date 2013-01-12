@@ -24,7 +24,7 @@ import javax.validation.constraints.NotNull;
 @AssociationOverrides({
 		@AssociationOverride(name = "id.product", joinColumns = @JoinColumn(name = "product_id")),
 		@AssociationOverride(name = "id.sideB", joinColumns = @JoinColumn(name = "customer_id")) })
-public class CustomerPrice implements Serializable {
+public class CustomerPrice extends Price implements Serializable {
 
 	@EmbeddedId
 	private @Column(name = "id", updatable = false, nullable = false)

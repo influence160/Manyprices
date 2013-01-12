@@ -103,6 +103,15 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
+						<h:outputText value="#{msgPro.purchasePrice}"/>
+					</f:facet>
+					<h:link outcome="/product/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemPurchasePrice" value="#{_item.purchasePrice.price}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
 						<h:outputText value="#{msgPro.date_updated}"/>
 					</f:facet>
 					<h:link outcome="/product/view">
