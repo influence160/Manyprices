@@ -2,7 +2,6 @@ package com.ott.manyprices.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -26,9 +25,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import com.ott.manyprices.model.Category;
 import com.ott.manyprices.model.Customer;
 import com.ott.manyprices.model.Product;
-import com.ott.manyprices.model.Category;
 
 /**
  * Backing bean for Product entities.
@@ -328,7 +327,6 @@ public class ProductBean implements Serializable
 			   		.getResultList());
 	    allCustomers.removeAll(currentSellers);
 	    return allCustomers;
-
    }
-
+   
 }
