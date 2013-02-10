@@ -112,6 +112,17 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
+						<h:outputText value="#{msgPro.conseilledPrice}"/>
+					</f:facet>
+					<h:link outcome="/product/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemConseilledPrice" value="#{_item.conseilledPrice}">
+							<f:convertNumber maxFractionDigits="3" minFractionDigits="3"/>
+						</h:outputText>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
 						<h:outputText value="#{msgPro.date_updated}"/>
 					</f:facet>
 					<h:link outcome="/product/view">

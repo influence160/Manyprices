@@ -373,6 +373,13 @@ footer p {
 	background-image: url(remove.png);
 }
 
+#content .data-table .aply-button {
+	display: block;
+	width: 22px;
+	height: 22px;
+	background-image: url(aply.png);
+}
+
 #content .data-table-footer {
 	width: 50%;
 	margin-left: 50%;

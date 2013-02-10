@@ -138,23 +138,23 @@ public class CustomerPriceBean implements Serializable
    /*
     * Support updating and deleting CustomerPrice entities
     */
-
    public String update()
    {
       this.conversation.end();
 
       try
       {
-         if (this.id == null)
-         {
-            this.entityManager.persist(this.customerPrice);
-            return "search?faces-redirect=true";
-         }
-         else
-         {
+//         if (this.id == null)
+//         {
+//            this.entityManager.persist(this.customerPrice);
+//            return "search?faces-redirect=true";
+//         }
+//         else
+//         {
             this.entityManager.merge(this.customerPrice);
-            return "view?faces-redirect=true&id=" + this.customerPrice.getId();
-         }
+            return "view?faces-redirect=true&productId=" + this.customerPrice.getProduct().getId()
+            		+ "&customerId=" + this.customerPrice.getCustomer().getId();
+//         }
       }
       catch (Exception e)
       {

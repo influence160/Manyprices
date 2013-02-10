@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Version;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.lang.Override;
@@ -34,12 +35,15 @@ public class Product implements Serializable
    @Version
    private @Column(name = "version")
    int version = 0;
+   @NotNull
+   @Size(min=3, message = "Le nom du produit doit contenir au moin 3 caractères")
+   @Column(unique=true, nullable = false)
    private String name;
    private String dimention;
    private String description;
    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
    private ProductPrice purchasePrice;
-   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id.product")
+   @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "id.product")
    private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
    @ManyToOne(fetch = FetchType.LAZY)
    private Category category;
@@ -121,6 +125,11 @@ public class Product implements Serializable
       return purchasePrice;
    }
 
+   public float getConseilledPrice() 
+   {
+      return purchasePrice.getPrice() + purchasePrice.getPrice() * 35 / 100;
+   }
+
    public void setPurchasePrice(ProductPrice purchasePrice) 
    {
 	  purchasePrice.setProduct(this);
@@ -129,8 +138,9 @@ public class Product implements Serializable
    
    public void setPurchasePrice(CustomerPrice purchasePrice) 
    {
-	  ProductPrice productPrice = new ProductPrice(purchasePrice);
-	  setPurchasePrice(productPrice);
+	  //ProductPrice productPrice = new ProductPrice(purchasePrice);
+	  //setPurchasePrice(productPrice);
+	   this.purchasePrice.setPrice(purchasePrice.getPrice());
    }
 
    public Set<CustomerPrice> getPrices() 

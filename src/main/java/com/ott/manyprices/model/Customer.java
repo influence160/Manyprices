@@ -30,6 +30,7 @@ public class Customer implements Serializable
    int version = 0;
    @NotNull
    @Size(min=3, max=30, message="De 3 a 30 caractères")
+   @Column(unique=true, nullable=false)
    private String name;
    private String description;
    private String telephone;

@@ -77,7 +77,8 @@
 								<h:outputText value="#{msg.customer}"/>
 							</f:facet>
 							<h:link outcome="/customerPrice/view">
-								<f:param name="id" value="#{_item.id}"/>
+								<f:param name="productId" value="#{productBean.product.id}"/>
+								<f:param name="customerId" value="#{_item.customer.id}"/>
 								<h:outputText id="itemCustomer" value="#{_item.customer.name}"/>
 							</h:link>
 							<f:facet name="footer">
@@ -92,8 +93,11 @@
 								<h:outputText value="#{msgCP.price}"/>
 							</f:facet>
 							<h:link outcome="/customerPrice/view">
-								<f:param name="id" value="#{_item.id}"/>
-								<h:outputText id="itemPrice" value="#{_item.price}"/>
+								<f:param name="productId" value="#{productBean.product.id}"/>
+								<f:param name="customerId" value="#{_item.customer.id}"/>
+								<h:outputText id="itemPrice" value="#{_item.price}">
+									<f:convertNumber minFractionDigits="3"/>
+								</h:outputText>
 							</h:link>
 							<f:facet name="footer">
 								<h:inputText id="customerPriceBeanAddPrice" value="#{customerPriceBean.add.price}" />
@@ -101,7 +105,14 @@
 							</f:facet>
 						</h:column>
 						<h:column footerClass="remove-column" headerClass="remove-column">
-							<h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
+							<div style="display: block; width: 50px;">
+								<div style="float: right;">
+									<h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
+								</div>
+								<div>
+									<h:commandLink action="#{productBean.product.setPurchasePrice(_item)}" styleClass="aply-button"/>
+								</div>
+							</div>
 							<f:facet name="footer">
 								<h:commandLink action="#{_collection.add(customerPriceBean.added)}" id="productBeanProductPricesAdd" styleClass="add-button">
 									<f:setPropertyActionListener target="#{customerPriceBean.add.id.product}" value="#{productBean.product}"/>
