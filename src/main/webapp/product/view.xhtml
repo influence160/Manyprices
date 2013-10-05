@@ -78,6 +78,9 @@
 				<f:param name="id" value="#{productBean.product.category.id}"/>
 			</h:link>
 			<h:outputText/>
+			<h:outputLabel for="productBeanProductQuantitee" value="#{msgPro.quantitee}:"/>
+			<h:outputText id="productBeanProductQuantitee" value="#{productBean.product.quantitee}"/>
+			<h:outputText/>
 			<h:outputLabel for="productBeanProductDateUpdated" value="#{msgPro.date_updated}:"/>
 			<h:outputText id="productBeanProductDateUpdated" value="#{productBean.product.dateUpdated}">
 				<f:convertDateTime/>

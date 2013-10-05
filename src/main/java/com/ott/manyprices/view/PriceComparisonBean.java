@@ -3,10 +3,8 @@ package com.ott.manyprices.view;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import javax.ejb.Stateful;
 import javax.el.ValueExpression;
@@ -20,8 +18,6 @@ import javax.faces.component.html.HtmlOutcomeTargetLink;
 import javax.faces.component.html.HtmlOutputText;
 import javax.faces.component.html.HtmlPanelGroup;
 import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.convert.NumberConverter;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
@@ -60,7 +56,7 @@ public class PriceComparisonBean implements Serializable
    private EntityManager entityManager;
 	   
    private List<Map<String, Object>> pricesList;
-   private Set<String> customerNames;
+   private List<String> customerNames;
    
    /*
     * Support searching Product entities with pagination
@@ -100,9 +96,7 @@ public class PriceComparisonBean implements Serializable
    public void search()
    {
       this.page = 0;
-      paginate();
-      //populateDataTable();
-      //createDataTable();
+      populateDataTable();
    }
    
    public void _paginate()
@@ -124,8 +118,6 @@ public class PriceComparisonBean implements Serializable
       TypedQuery<Product> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
-      
-      
    }
 
    private Predicate[] getSearchPredicates(Root<Product> root)
@@ -163,27 +155,20 @@ public class PriceComparisonBean implements Serializable
 //	   productBean.paginate();
 	   _paginate();
 	   List<Product> pageItems = getPageItems();
-	   Set<String> newCustomerNames = new HashSet<String>();
-	   boolean customerListChanged = false;
+	   customerNames = new ArrayList<String>();
 	   pricesList = new ArrayList<Map<String, Object>>();
-	   for(Product product : pageItems) {
+	   for(Product product : pageItems){
 		   Map<String, Object> productPrices = new HashMap<String, Object>();
 		   productPrices.put("productName", product.getName());
 		   productPrices.put("productId", product.getId());
 		   for(CustomerPrice cp : product.getPrices()){
 			   String customer = cp.getCustomer().getName();
-			   if(customerNames == null || !customerNames.contains(customer)){
-				   customerListChanged = true;
+			   if(!customerNames.contains(customer)){
+				   customerNames.add(customer);
 			   }
-			   newCustomerNames.add(customer);
 			   productPrices.put(customer, cp.getPrice());
 		   }
 		   pricesList.add(productPrices);
-	   }
-	   if (customerNames == null || customerNames.size() != newCustomerNames.size()
-			   || customerListChanged) {
-		   customerNames = newCustomerNames;
-		   recreateCustomersCulumns();
 	   }
    }
 
@@ -191,9 +176,9 @@ public class PriceComparisonBean implements Serializable
    private HtmlDataTable dataTable;
    // Actions -----------------------------------------------------------------------------------
 
-   private void recreateCustomersCulumns() {
+   private void populateDataTable() {
+	   paginate();
 	   while(dataTable.getChildren().size() > 1){
-		   //remove the costomers columns
 		   dataTable.getChildren().remove(1);
 	   }
        for(String customer : customerNames){
@@ -244,9 +229,6 @@ public class PriceComparisonBean implements Serializable
 		   createValueExpression("#{_item['productId']}", Long.class));
        nameLink.getChildren().add(productIdParam);
        HtmlOutputText nameOutput = new HtmlOutputText();
-       NumberConverter converter = new NumberConverter();
-       converter.setMinFractionDigits(3);
-       nameOutput.setConverter(converter);
        nameOutput.setValueExpression("value",
            createValueExpression("#{_item['productName']}", String.class));
        nameLink.getChildren().add(nameOutput);
@@ -301,7 +283,7 @@ public class PriceComparisonBean implements Serializable
 	  return pricesList;
    }
 
-   public Set<String> getCustomerNames() {
+   public List<String> getCustomerNames() {
 	  return customerNames;
    }
 }

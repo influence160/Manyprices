@@ -32,14 +32,23 @@
 						<li>
 							<h:link outcome="/product/search" value="#{msg.products}"/>
 						</li>
+						<li>
+							<h:link outcome="/sellItem/search" value="#{msg.sellItems}"/>
+						</li>
 					</ul>
 					<div class="navbar-right">
 							<h:form>
+							<h:commandLink action="#{migrationBean.migration()}">
+								M
+							</h:commandLink>
 							<h:commandLink action="#{languageBean.changeToFr()}">
 								<img src="#{resource['french.gif']}" alt="English" border="0" />
 							</h:commandLink>
 							<h:commandLink action="#{languageBean.changeToEn}">
 								<img src="#{resource['english.jpg']}" alt="Français" border="0" />
+							</h:commandLink>
+							<h:commandLink action="#{preferencesBean.changeShowPurshasePrices()}">
+								$
 							</h:commandLink>
 							</h:form>
 					</div>

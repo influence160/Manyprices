@@ -10,12 +10,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
+import javax.persistence.Transient;
 import javax.persistence.Version;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.lang.Override;
@@ -25,9 +27,15 @@ import java.util.Iterator;
 import java.util.Set;
 
 @Entity
+@NamedQueries({
+    @NamedQuery(name="findProductByName", query="FROM Customer c where name = :name")
+	
+})
 public class Product implements Serializable
 {
 
+   public static final String QUERY_FIND_BY_NAME = "findProductByName";
+   
    @Id
    private @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "id", updatable = false, nullable = false)
@@ -35,19 +43,17 @@ public class Product implements Serializable
    @Version
    private @Column(name = "version")
    int version = 0;
-   @NotNull
-   @Size(min=3, message = "Le nom du produit doit contenir au moin 3 caractères")
-   @Column(unique=true, nullable = false)
    private String name;
    private String dimention;
    private String description;
    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
    private ProductPrice purchasePrice;
-   @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, mappedBy = "id.product")
+   @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id.product")
    private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
    @ManyToOne(fetch = FetchType.LAZY)
    private Category category;
    private Date dateUpdated;
+   private int quantitee;
    @Column(length=1024)
    @Size(max=1024)
    private String note;
@@ -125,11 +131,6 @@ public class Product implements Serializable
       return purchasePrice;
    }
 
-   public float getConseilledPrice() 
-   {
-      return purchasePrice.getPrice() + purchasePrice.getPrice() * 35 / 100;
-   }
-
    public void setPurchasePrice(ProductPrice purchasePrice) 
    {
 	  purchasePrice.setProduct(this);
@@ -138,9 +139,8 @@ public class Product implements Serializable
    
    public void setPurchasePrice(CustomerPrice purchasePrice) 
    {
-	  //ProductPrice productPrice = new ProductPrice(purchasePrice);
-	  //setPurchasePrice(productPrice);
-	   this.purchasePrice.setPrice(purchasePrice.getPrice());
+	  ProductPrice productPrice = new ProductPrice(purchasePrice);
+	  setPurchasePrice(productPrice);
    }
 
    public Set<CustomerPrice> getPrices() 
@@ -168,6 +168,19 @@ public class Product implements Serializable
       return dateUpdated;
    }
 
+   public void setQuantitee(int quantitee) {
+	  this.quantitee = quantitee;
+   }
+
+   public int getQuantitee() {
+	  return quantitee;
+   }
+   
+   @Transient
+   public float getTotalPrice() {
+	   return getPurchasePrice().getPrice() * getQuantitee();
+   }
+	
    public String getNote() {
 	  return note;
    }

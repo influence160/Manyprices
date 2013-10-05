@@ -85,20 +85,20 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="#{msgPro.description}"/>
-					</f:facet>
-					<h:link outcome="/product/view">
-						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemDescription" value="#{_item.description}"/>
-					</h:link>
-				</h:column>
-				<h:column>
-					<f:facet name="header">
 						<h:outputText value="#{msg.category}"/>
 					</f:facet>
 					<h:link outcome="/product/view">
 						<f:param name="id" value="#{_item.id}"/>
 						<h:outputText id="itemCategory" value="#{_item.category.name}"/>
+					</h:link>
+				</h:column>
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="#{msgPro.quantitee}"/>
+					</f:facet>
+					<h:link outcome="/product/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemQuantitee" value="#{_item.quantitee}"/>
 					</h:link>
 				</h:column>
 				<h:column>
@@ -112,13 +112,11 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="#{msgPro.conseilledPrice}"/>
+						<h:outputText value="#{msgPro.totalPrice}"/>
 					</f:facet>
 					<h:link outcome="/product/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemConseilledPrice" value="#{_item.conseilledPrice}">
-							<f:convertNumber maxFractionDigits="3" minFractionDigits="3"/>
-						</h:outputText>
+						<h:outputText id="itemTotalPrice" value="#{_item.totalPrice}"/>
 					</h:link>
 				</h:column>
 				<h:column>
@@ -136,6 +134,9 @@
 			<ui:include src="/resources/scaffold/paginator.xhtml">
 				<ui:param name="paginatorBean" value="#{productBean}"/>
 			</ui:include>
+			<div class="total">
+			#{msgPro['totalPrices']} : #{productBean.totalPrices}
+			</div>
 		</h:form>
 			
 	</ui:define>

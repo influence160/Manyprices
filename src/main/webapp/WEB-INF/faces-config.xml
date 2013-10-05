@@ -29,6 +29,14 @@
 		<base-name>customerPrice.messages</base-name>
 		<var>msgCP</var>
 	  </resource-bundle>
+	  <resource-bundle>
+		<base-name>entry.messages</base-name>
+		<var>msgEnt</var>
+	  </resource-bundle>
+	  <resource-bundle>
+		<base-name>sellItem.messages</base-name>
+		<var>msgSI</var>
+	  </resource-bundle>
 	  
 	  <view-handler>com.ott.manyprices.view.LocaleViewHandler</view-handler>
     </application>

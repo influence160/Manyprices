@@ -1,7 +1,12 @@
 package com.ott.manyprices.view;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -24,15 +29,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import com.ott.manyprices.model.Customer;
-import com.ott.manyprices.model.CustomerPrice;
-import com.ott.manyprices.model.CustomerPriceId;
 import com.ott.manyprices.model.Product;
+import com.ott.manyprices.model.SellItem;
 
 /**
- * Backing bean for CustomerPrice entities.
+ * Backing bean for SellItem entities.
  * <p>
- * This class provides CRUD functionality for all CustomerPrice entities. It focuses
+ * This class provides CRUD functionality for all SellItem entities. It focuses
  * purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt> for
  * state management, <tt>PersistenceContext</tt> for persistence,
  * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD framework or
@@ -42,50 +45,39 @@ import com.ott.manyprices.model.Product;
 @Named
 @Stateful
 @ConversationScoped
-public class CustomerPriceBean implements Serializable
+public class SellItemBean implements Serializable
 {
 
    private static final long serialVersionUID = 1L;
 
    /*
-    * Support creating and retrieving CustomerPrice entities
+    * Support creating and retrieving SellItem entities
     */
-   private Long productId;
-   private Long customerId;
-   private CustomerPriceId id;
    
-   public Long getProductId() {
-	   return productId;
+   public SellItemBean() {
+       Calendar today = Calendar.getInstance();
+       dateAfter = dateFormat.format(today.getTime());
+       today.add(Calendar.DAY_OF_MONTH, 1);
+       dateBefore = dateFormat.format(today.getTime());
    }
 
-   public void setProductId(Long productId) {
-	   this.productId = productId;
-   }
+   private Long id;
 
-   public Long getCustomerId() {
-	   return customerId;
-   }
-
-   public void setCustomerId(Long customerId) {
-     	this.customerId = customerId;
-   }
-
-   public CustomerPriceId getId()
+   public Long getId()
    {
-	   id = new CustomerPriceId(getProductId(), getCustomerId());
-       return id;
+      return this.id;
    }
 
-   public void setId(CustomerPriceId id)
+   public void setId(Long id)
    {
       this.id = id;
    }
 
-   private CustomerPrice customerPrice;
+   private SellItem sellItem;
 
-   public CustomerPrice getCustomerPrice()
+   public SellItem getSellItem()
    {
-      return this.customerPrice;
+      return this.sellItem;
    }
 
    @Inject
@@ -114,29 +106,24 @@ public class CustomerPriceBean implements Serializable
          this.conversation.begin();
       }
 
-      if (this.getId() == null)
+      if (this.id == null)
       {
-         this.customerPrice = this.example;
+         this.sellItem = this.example;
       }
       else
       {
-         this.customerPrice = findById(getId());
+         this.sellItem = findById(getId());
       }
    }
 
-   public CustomerPrice findById(CustomerPriceId id)
+   public SellItem findById(Long id)
    {
-	  return (CustomerPrice) entityManager.createQuery("SELECT cp FROM CustomerPrice cp " +
-	   		" LEFT JOIN FETCH cp.id.customer" +
-	   		" LEFT JOIN FETCH cp.id.product" +
-	   		" WHERE cp.id=:id")
-	   		.setParameter("id", id)
-	   		.getSingleResult();
-//      return this.entityManager.find(CustomerPrice.class, id);
+
+      return this.entityManager.find(SellItem.class, id);
    }
 
    /*
-    * Support updating and deleting CustomerPrice entities
+    * Support updating and deleting SellItem entities
     */
 
    public String update()
@@ -147,13 +134,13 @@ public class CustomerPriceBean implements Serializable
       {
          if (this.id == null)
          {
-            this.entityManager.persist(this.customerPrice);
+            this.entityManager.persist(this.sellItem);
             return "search?faces-redirect=true";
          }
          else
          {
-            this.entityManager.merge(this.customerPrice);
-            return "view?faces-redirect=true&id=" + this.customerPrice.getId();
+            this.entityManager.merge(this.sellItem);
+            return "view?faces-redirect=true&id=" + this.sellItem.getId();
          }
       }
       catch (Exception e)
@@ -181,14 +168,18 @@ public class CustomerPriceBean implements Serializable
    }
 
    /*
-    * Support searching CustomerPrice entities with pagination
+    * Support searching SellItem entities with pagination
     */
 
    private int page;
    private long count;
-   private List<CustomerPrice> pageItems;
+   private List<SellItem> pageItems;
 
-   private CustomerPrice example = new CustomerPrice();
+   private SellItem example = new SellItem();
+   private static final String DATE_PATTERN = "dd-MM-yyyy";
+   private static final DateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
+   private String dateBefore;
+   private String dateAfter;
 
    public int getPage()
    {
@@ -205,20 +196,35 @@ public class CustomerPriceBean implements Serializable
       return 10;
    }
 
-   public CustomerPrice getExample()
+   public SellItem getExample()
    {
       return this.example;
    }
 
-   public void setExample(CustomerPrice example)
+   public void setExample(SellItem example)
    {
       this.example = example;
    }
+   
+    public String getDateBefore() {
+	return dateBefore;
+    }
 
-   public void search()
-   {
-      this.page = 0;
-   }
+    public void setDateBefore(String dateBefore) {
+	this.dateBefore = dateBefore;
+    }
+
+    public String getDateAfter() {
+	return dateAfter;
+    }
+
+    public void setDateAfter(String dateAfter) {
+	this.dateAfter = dateAfter;
+    }
+
+    public void search() {
+	this.page = 0;
+    }
 
    public void paginate()
    {
@@ -228,40 +234,49 @@ public class CustomerPriceBean implements Serializable
       // Populate this.count
 
       CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<CustomerPrice> root = countCriteria.from(CustomerPrice.class);
+      Root<SellItem> root = countCriteria.from(SellItem.class);
       countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
       this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
 
       // Populate this.pageItems
 
-      CriteriaQuery<CustomerPrice> criteria = builder.createQuery(CustomerPrice.class);
-      root = criteria.from(CustomerPrice.class);
-      TypedQuery<CustomerPrice> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
+      CriteriaQuery<SellItem> criteria = builder.createQuery(SellItem.class);
+      root = criteria.from(SellItem.class);
+      TypedQuery<SellItem> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
    }
 
-   private Predicate[] getSearchPredicates(Root<CustomerPrice> root)
+   private Predicate[] getSearchPredicates(Root<SellItem> root)
    {
 
       CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
       List<Predicate> predicatesList = new ArrayList<Predicate>();
 
+      try {
+          if (dateAfter != null && !dateAfter.trim().isEmpty())
+          {
+             Date dateA = dateFormat.parse(dateAfter);
+             predicatesList.add(builder.greaterThanOrEqualTo(root.<Date> get("date"), dateA));
+          }
+          if (dateBefore != null && !dateBefore.trim().isEmpty())
+          {
+              Date dateB  = dateFormat.parse(dateBefore);
+              predicatesList.add(builder.lessThanOrEqualTo(root.<Date> get("date"), dateB));
+           }
+      } catch (ParseException e) {
+            throw new RuntimeException(e.getMessage(), e);
+      }
       Product product = this.example.getProduct();
       if (product != null)
       {
          predicatesList.add(builder.equal(root.get("product"), product));
       }
-      Customer customer = this.example.getCustomer();
-      if (customer != null)
-      {
-         predicatesList.add(builder.equal(root.get("customer"), customer));
-      }
 
       return predicatesList.toArray(new Predicate[predicatesList.size()]);
    }
 
-   public List<CustomerPrice> getPageItems()
+   public List<SellItem> getPageItems()
    {
       return this.pageItems;
    }
@@ -272,15 +287,15 @@ public class CustomerPriceBean implements Serializable
    }
 
    /*
-    * Support listing and POSTing back CustomerPrice entities (e.g. from inside an
+    * Support listing and POSTing back SellItem entities (e.g. from inside an
     * HtmlSelectOneMenu)
     */
 
-   public List<CustomerPrice> getAll()
+   public List<SellItem> getAll()
    {
 
-      CriteriaQuery<CustomerPrice> criteria = this.entityManager.getCriteriaBuilder().createQuery(CustomerPrice.class);
-      return this.entityManager.createQuery(criteria.select(criteria.from(CustomerPrice.class))).getResultList();
+      CriteriaQuery<SellItem> criteria = this.entityManager.getCriteriaBuilder().createQuery(SellItem.class);
+      return this.entityManager.createQuery(criteria.select(criteria.from(SellItem.class))).getResultList();
    }
 
    @Resource
@@ -289,7 +304,7 @@ public class CustomerPriceBean implements Serializable
    public Converter getConverter()
    {
 
-      final CustomerPriceBean ejbProxy = this.sessionContext.getBusinessObject(CustomerPriceBean.class);
+      final SellItemBean ejbProxy = this.sessionContext.getBusinessObject(SellItemBean.class);
 
       return new Converter()
       {
@@ -297,10 +312,8 @@ public class CustomerPriceBean implements Serializable
          @Override
          public Object getAsObject(FacesContext context, UIComponent component, String value)
          {
-        	 String[] ids = value.split("|");
-        	 Long productId = Long.valueOf(ids[0]);
-        	 Long customerId = Long.valueOf(ids[1]);
-             return ejbProxy.findById(new CustomerPriceId(productId, customerId));
+
+            return ejbProxy.findById(Long.valueOf(value));
          }
 
          @Override
@@ -311,8 +324,8 @@ public class CustomerPriceBean implements Serializable
             {
                return "";
             }
-            CustomerPrice cp = (CustomerPrice) value;
-            return String.valueOf(cp.getProduct().getId()) + "|" + String.valueOf(cp.getCustomer().getId());
+
+            return String.valueOf(((SellItem) value).getId());
          }
       };
    }
@@ -321,17 +334,22 @@ public class CustomerPriceBean implements Serializable
     * Support adding children to bidirectional, one-to-many tables
     */
 
-   private CustomerPrice add = new CustomerPrice();
+   private SellItem add = new SellItem();
 
-   public CustomerPrice getAdd()
+   public SellItem getAdd()
    {
       return this.add;
    }
 
-   public CustomerPrice getAdded()
+   public SellItem getAdded()
    {
-      CustomerPrice added = this.add;
-      this.add = new CustomerPrice();
+      SellItem added = this.add;
+      this.add = new SellItem();
       return added;
    }
+   
+   public static void main(String[] args) {
+       System.out.println(dateFormat.format(new Date()));
+   }
+   
 }

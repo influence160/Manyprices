@@ -25,14 +25,13 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.ott.manyprices.model.Customer;
-import com.ott.manyprices.model.CustomerPrice;
-import com.ott.manyprices.model.CustomerPriceId;
+import com.ott.manyprices.model.Entry;
 import com.ott.manyprices.model.Product;
 
 /**
- * Backing bean for CustomerPrice entities.
+ * Backing bean for Entry entities.
  * <p>
- * This class provides CRUD functionality for all CustomerPrice entities. It focuses
+ * This class provides CRUD functionality for all Entry entities. It focuses
  * purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt> for
  * state management, <tt>PersistenceContext</tt> for persistence,
  * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD framework or
@@ -42,50 +41,32 @@ import com.ott.manyprices.model.Product;
 @Named
 @Stateful
 @ConversationScoped
-public class CustomerPriceBean implements Serializable
+public class EntryBean implements Serializable
 {
 
    private static final long serialVersionUID = 1L;
 
    /*
-    * Support creating and retrieving CustomerPrice entities
+    * Support creating and retrieving Entry entities
     */
-   private Long productId;
-   private Long customerId;
-   private CustomerPriceId id;
-   
-   public Long getProductId() {
-	   return productId;
-   }
 
-   public void setProductId(Long productId) {
-	   this.productId = productId;
-   }
+   private Long id;
 
-   public Long getCustomerId() {
-	   return customerId;
-   }
-
-   public void setCustomerId(Long customerId) {
-     	this.customerId = customerId;
-   }
-
-   public CustomerPriceId getId()
+   public Long getId()
    {
-	   id = new CustomerPriceId(getProductId(), getCustomerId());
-       return id;
+      return this.id;
    }
 
-   public void setId(CustomerPriceId id)
+   public void setId(Long id)
    {
       this.id = id;
    }
 
-   private CustomerPrice customerPrice;
+   private Entry entry;
 
-   public CustomerPrice getCustomerPrice()
+   public Entry getEntry()
    {
-      return this.customerPrice;
+      return this.entry;
    }
 
    @Inject
@@ -114,29 +95,24 @@ public class CustomerPriceBean implements Serializable
          this.conversation.begin();
       }
 
-      if (this.getId() == null)
+      if (this.id == null)
       {
-         this.customerPrice = this.example;
+         this.entry = this.example;
       }
       else
       {
-         this.customerPrice = findById(getId());
+         this.entry = findById(getId());
       }
    }
 
-   public CustomerPrice findById(CustomerPriceId id)
+   public Entry findById(Long id)
    {
-	  return (CustomerPrice) entityManager.createQuery("SELECT cp FROM CustomerPrice cp " +
-	   		" LEFT JOIN FETCH cp.id.customer" +
-	   		" LEFT JOIN FETCH cp.id.product" +
-	   		" WHERE cp.id=:id")
-	   		.setParameter("id", id)
-	   		.getSingleResult();
-//      return this.entityManager.find(CustomerPrice.class, id);
+
+      return this.entityManager.find(Entry.class, id);
    }
 
    /*
-    * Support updating and deleting CustomerPrice entities
+    * Support updating and deleting Entry entities
     */
 
    public String update()
@@ -147,13 +123,13 @@ public class CustomerPriceBean implements Serializable
       {
          if (this.id == null)
          {
-            this.entityManager.persist(this.customerPrice);
+            this.entityManager.persist(this.entry);
             return "search?faces-redirect=true";
          }
          else
          {
-            this.entityManager.merge(this.customerPrice);
-            return "view?faces-redirect=true&id=" + this.customerPrice.getId();
+            this.entityManager.merge(this.entry);
+            return "view?faces-redirect=true&id=" + this.entry.getId();
          }
       }
       catch (Exception e)
@@ -181,14 +157,14 @@ public class CustomerPriceBean implements Serializable
    }
 
    /*
-    * Support searching CustomerPrice entities with pagination
+    * Support searching Entry entities with pagination
     */
 
    private int page;
    private long count;
-   private List<CustomerPrice> pageItems;
+   private List<Entry> pageItems;
 
-   private CustomerPrice example = new CustomerPrice();
+   private Entry example = new Entry();
 
    public int getPage()
    {
@@ -205,12 +181,12 @@ public class CustomerPriceBean implements Serializable
       return 10;
    }
 
-   public CustomerPrice getExample()
+   public Entry getExample()
    {
       return this.example;
    }
 
-   public void setExample(CustomerPrice example)
+   public void setExample(Entry example)
    {
       this.example = example;
    }
@@ -228,40 +204,41 @@ public class CustomerPriceBean implements Serializable
       // Populate this.count
 
       CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<CustomerPrice> root = countCriteria.from(CustomerPrice.class);
+      Root<Entry> root = countCriteria.from(Entry.class);
       countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
       this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
 
       // Populate this.pageItems
 
-      CriteriaQuery<CustomerPrice> criteria = builder.createQuery(CustomerPrice.class);
-      root = criteria.from(CustomerPrice.class);
-      TypedQuery<CustomerPrice> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
+      CriteriaQuery<Entry> criteria = builder.createQuery(Entry.class);
+      root = criteria.from(Entry.class);
+      TypedQuery<Entry> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
    }
 
-   private Predicate[] getSearchPredicates(Root<CustomerPrice> root)
+   private Predicate[] getSearchPredicates(Root<Entry> root)
    {
 
       CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
       List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-      Product product = this.example.getProduct();
-      if (product != null)
-      {
-         predicatesList.add(builder.equal(root.get("product"), product));
-      }
       Customer customer = this.example.getCustomer();
       if (customer != null)
       {
          predicatesList.add(builder.equal(root.get("customer"), customer));
       }
+      
+      Product product = this.example.getProduct();
+      if (product != null)
+      {
+         predicatesList.add(builder.equal(root.get("product"), product));
+      }
 
       return predicatesList.toArray(new Predicate[predicatesList.size()]);
    }
 
-   public List<CustomerPrice> getPageItems()
+   public List<Entry> getPageItems()
    {
       return this.pageItems;
    }
@@ -272,15 +249,15 @@ public class CustomerPriceBean implements Serializable
    }
 
    /*
-    * Support listing and POSTing back CustomerPrice entities (e.g. from inside an
+    * Support listing and POSTing back Entry entities (e.g. from inside an
     * HtmlSelectOneMenu)
     */
 
-   public List<CustomerPrice> getAll()
+   public List<Entry> getAll()
    {
 
-      CriteriaQuery<CustomerPrice> criteria = this.entityManager.getCriteriaBuilder().createQuery(CustomerPrice.class);
-      return this.entityManager.createQuery(criteria.select(criteria.from(CustomerPrice.class))).getResultList();
+      CriteriaQuery<Entry> criteria = this.entityManager.getCriteriaBuilder().createQuery(Entry.class);
+      return this.entityManager.createQuery(criteria.select(criteria.from(Entry.class))).getResultList();
    }
 
    @Resource
@@ -289,7 +266,7 @@ public class CustomerPriceBean implements Serializable
    public Converter getConverter()
    {
 
-      final CustomerPriceBean ejbProxy = this.sessionContext.getBusinessObject(CustomerPriceBean.class);
+      final EntryBean ejbProxy = this.sessionContext.getBusinessObject(EntryBean.class);
 
       return new Converter()
       {
@@ -297,10 +274,8 @@ public class CustomerPriceBean implements Serializable
          @Override
          public Object getAsObject(FacesContext context, UIComponent component, String value)
          {
-        	 String[] ids = value.split("|");
-        	 Long productId = Long.valueOf(ids[0]);
-        	 Long customerId = Long.valueOf(ids[1]);
-             return ejbProxy.findById(new CustomerPriceId(productId, customerId));
+
+            return ejbProxy.findById(Long.valueOf(value));
          }
 
          @Override
@@ -311,8 +286,8 @@ public class CustomerPriceBean implements Serializable
             {
                return "";
             }
-            CustomerPrice cp = (CustomerPrice) value;
-            return String.valueOf(cp.getProduct().getId()) + "|" + String.valueOf(cp.getCustomer().getId());
+
+            return String.valueOf(((Entry) value).getId());
          }
       };
    }
@@ -321,17 +296,23 @@ public class CustomerPriceBean implements Serializable
     * Support adding children to bidirectional, one-to-many tables
     */
 
-   private CustomerPrice add = new CustomerPrice();
+   private Entry add = new Entry();
 
-   public CustomerPrice getAdd()
+   public Entry getAdd()
    {
       return this.add;
    }
+   
+   
 
-   public CustomerPrice getAdded()
+   public Entry getAdded()
    {
-      CustomerPrice added = this.add;
-      this.add = new CustomerPrice();
+      Entry added = this.add;
+      this.add = new Entry();
       return added;
+   }
+   
+   public void removeEntry(Entry entry) {
+	   entityManager.remove(entry);
    }
 }

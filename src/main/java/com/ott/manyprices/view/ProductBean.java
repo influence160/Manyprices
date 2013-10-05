@@ -22,12 +22,19 @@ import javax.persistence.PersistenceContextType;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Selection;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
+import javax.persistence.metamodel.SingularAttribute;
 
 import com.ott.manyprices.model.Category;
 import com.ott.manyprices.model.Customer;
 import com.ott.manyprices.model.Product;
+import com.ott.manyprices.model.ProductPrice;
 
 /**
  * Backing bean for Product entities.
@@ -163,6 +170,7 @@ public class ProductBean implements Serializable
 
    private int page;
    private long count;
+   private double totalPrices;
    private List<Product> pageItems;
 
    private Product example = new Product();
@@ -216,6 +224,15 @@ public class ProductBean implements Serializable
       TypedQuery<Product> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
+      
+      CriteriaQuery<Object> totalPricesCriteria = builder.createQuery(Object.class);
+      root = totalPricesCriteria.from(Product.class);
+      Root<ProductPrice> ppRoot = totalPricesCriteria.from(ProductPrice.class);
+//      Metamodel m = this.entityManager.getMetamodel();
+//      EntityType<Product> productMM = m.entity(Product.class);
+//      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(root.get("purchasePrice.price"), root.get("quantitee")))).where(getSearchPredicates(root));
+      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(ppRoot.<Double> get("price"), root.<Integer> get("quantitee")))).where(getSearchPredicates(root));
+      this.totalPrices = (Double) this.entityManager.createQuery(totalPricesCriteria).getSingleResult();
    }
 
    private Predicate[] getSearchPredicates(Root<Product> root)
@@ -256,6 +273,10 @@ public class ProductBean implements Serializable
    public long getCount()
    {
       return this.count;
+   }
+   
+   public double getTotalPrices() {
+	   return this.totalPrices;
    }
 
    /*

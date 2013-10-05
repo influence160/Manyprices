@@ -9,6 +9,8 @@ import javax.persistence.Id;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Version;
 import javax.validation.constraints.NotNull;
@@ -20,9 +22,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-public class Category implements Serializable
-{
+@NamedQueries({
+    @NamedQuery(name="findCategoryByName", query="FROM Customer c where name = :name")
+	
+})
+public class Category implements Serializable {
 
+   public static final String QUERY_FIND_BY_NAME = "findCategoryByName";
+   
    @Id
    private @GeneratedValue(strategy = GenerationType.AUTO)
    @Column(name = "id", updatable = false, nullable = false)

@@ -8,7 +8,7 @@
 	template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
-<!-- 		<f:viewParam name="id" value="#{customerPriceBean.id}"/> -->
+		<f:viewParam name="id" value="#{customerPriceBean.id}"/>
 		<f:viewParam name="productId" value="#{customerPriceBean.productId}"/>
 		<f:viewParam name="customerId" value="#{customerPriceBean.customerId}"/>
 		<f:event type="preRenderView" listener="#{customerPriceBean.retrieve}"/>
@@ -74,8 +74,7 @@
 				<c:choose>
 					<c:when test="#{!empty customerPriceBean.id}">
 						<h:link value="#{msg.cancel}" outcome="view" styleClass="btn btn-primary">
-							<f:param name="productId" value="#{customerPriceBean.customerPrice.product.id}"/>
-							<f:param name="customerId" value="#{customerPriceBean.customerPrice.customer.id}"/>
+							<f:param name="id" value="#{customerPriceBean.id}"/>
 						</h:link>
 						<h:commandLink value="#{msg.delete}" action="#{customerPriceBean.delete}" styleClass="btn btn-primary"/>
 					</c:when>

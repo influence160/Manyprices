@@ -33,7 +33,7 @@
 						<h:panelGroup>
 							<h:selectOneMenu converter="#{productBean.converter}" id="customerPriceBeanExampleProduct" value="#{customerPriceBean.example.product}">
 								<f:selectItem/>
-								<f:selectItems value="#{productBean.all}" var="_product" itemLabel="#{_product.name}"/>
+								<f:selectItems value="#{productBean.all}"/>
 							</h:selectOneMenu>
 							<h:message for="customerPriceBeanExampleProduct" styleClass="error"/>
 						</h:panelGroup>
@@ -42,7 +42,7 @@
 						<h:panelGroup>
 							<h:selectOneMenu converter="#{customerBean.converter}" id="customerPriceBeanExampleCustomer" value="#{customerPriceBean.example.customer}">
 								<f:selectItem/>
-								<f:selectItems value="#{customerBean.all}" var="_customer" itemLabel="#{_customer.name}"/>
+								<f:selectItems value="#{customerBean.all}"/>
 							</h:selectOneMenu>
 							<h:message for="customerPriceBeanExampleCustomer" styleClass="error"/>
 						</h:panelGroup>
@@ -62,7 +62,7 @@
 					</f:facet>
 					<h:link outcome="/customerPrice/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemProduct" value="#{_item.product.name}"/>
+						<h:outputText id="itemProduct" value="#{_item.product}"/>
 					</h:link>
 				</h:column>
 				<h:column>
@@ -71,7 +71,7 @@
 					</f:facet>
 					<h:link outcome="/customerPrice/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemCustomer" value="#{_item.customer.name}"/>
+						<h:outputText id="itemCustomer" value="#{_item.customer}"/>
 					</h:link>
 				</h:column>
 			</h:dataTable>

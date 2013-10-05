@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{sellItemBean.id}"/>
+		<f:event type="preRenderView" listener="#{sellItemBean.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="View SellItem"/>
+
+	<ui:define name="header">
+		#{msgSI['header.view']}
+	</ui:define>
+
+	<ui:define name="subheader">
+		View existing SellItem
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="sellItemBeanSellItemProduct" value="#{msgSI.product}:"/>
+			<h:link id="sellItemBeanSellItemProduct" outcome="/product/view" value="#{sellItemBean.sellItem.product.name}">
+				<f:param name="id" value="#{sellItemBean.sellItem.product.id}"/>
+			</h:link>
+			<h:outputText/>
+			<h:outputLabel for="sellItemBeanSellItemQuantitee" value="#{msgSI.quantitee}:"/>
+			<h:outputText id="sellItemBeanSellItemQuantitee" value="#{sellItemBean.sellItem.quantitee}"/>
+			<h:outputText/>
+			<h:outputLabel for="sellItemBeanSellItemDescription" value="#{msgSI.date}:"/>
+			<h:outputText id="sellItemBeanSellItemDescription" value="#{sellItemBean.sellItem.date}"/>
+			<h:outputText/>
+		</h:panelGrid> 
+
+		<div class="buttons">
+			<h:link value="#{msg.view_all}" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="#{msg.edit}" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="#{msg.create_new}" outcome="create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -32,7 +32,6 @@ public class CustomerPrice extends Price implements Serializable {
 	@Version
 	private @Column(name = "version")
 	int version = 0;
-	@javax.validation.constraints.Digits(integer = 12 ,fraction = 3)
 	private float price;
     private Date dateUpdated;
     
@@ -94,7 +93,47 @@ public class CustomerPrice extends Price implements Serializable {
 		this.id.setCustomer(customer);
 	}
 
-	
+	// @Id
+	// @GeneratedValue
+	// private Long id;
+	//
+	// public Long getId()
+	// {
+	// return id;
+	// }
+	//
+	// public void setId(Long id)
+	// {
+	// this.id = id;
+	// }
+	//
+	// @NotNull
+	// @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// private Product product;
+	// @NotNull
+	// @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	// private Customer customer;
+	//
+	// public Product getProduct()
+	// {
+	// return this.product;
+	// }
+	//
+	// public void setProduct(Product product)
+	// {
+	// this.product = product;
+	// }
+	//
+	// public Customer getCustomer()
+	// {
+	// return customer;
+	// }
+	//
+	// public void setCustomer(Customer customer)
+	// {
+	// this.customer = customer;
+	// }
+
 	@Override
 	public boolean equals(Object that) {
 		if (this == that) {
