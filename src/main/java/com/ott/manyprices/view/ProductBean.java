@@ -2,6 +2,7 @@ package com.ott.manyprices.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -231,8 +232,12 @@ public class ProductBean implements Serializable
 //      Metamodel m = this.entityManager.getMetamodel();
 //      EntityType<Product> productMM = m.entity(Product.class);
 //      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(root.get("purchasePrice.price"), root.get("quantitee")))).where(getSearchPredicates(root));
-      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(ppRoot.<Double> get("price"), root.<Integer> get("quantitee")))).where(getSearchPredicates(root));
-      this.totalPrices = (Double) this.entityManager.createQuery(totalPricesCriteria).getSingleResult();
+      Predicate[] predicates = Arrays.copyOf(getSearchPredicates(root), getSearchPredicates(root).length + 1);
+      predicates[predicates.length - 1] = builder.equal(root.<ProductPrice> get("purchasePrice"), ppRoot.get("product"));
+      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(ppRoot.<Double> get("price"), root.<Integer> get("quantitee"))))
+    		  .where(predicates);
+      TypedQuery<Object> tq = this.entityManager.createQuery(totalPricesCriteria);
+      this.totalPrices = (Double) tq.getSingleResult();
    }
 
    private Predicate[] getSearchPredicates(Root<Product> root)
@@ -275,8 +280,8 @@ public class ProductBean implements Serializable
       return this.count;
    }
    
-   public double getTotalPrices() {
-	   return this.totalPrices;
+   public String getTotalPrices() {
+	   return String.valueOf(this.totalPrices);
    }
 
    /*
