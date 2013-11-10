@@ -95,6 +95,9 @@
 			<h:link value="#{msg.view_all}" outcome="search" styleClass="btn btn-primary"/> 
 			<h:link value="#{msg.edit}" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
 			<h:link value="#{msg.create_new}" outcome="create" styleClass="btn btn-primary"/>
+			<h:link value="#{msg.create_sell_item}" outcome="/sellItem/create" styleClass="btn btn-primary">
+				<f:param name="productId" value="#{productBean.id}" />
+			</h:link>
 		</div>
 	</ui:define>
 

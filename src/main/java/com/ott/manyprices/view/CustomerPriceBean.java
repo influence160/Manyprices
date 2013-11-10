@@ -7,8 +7,10 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -185,6 +187,7 @@ public class CustomerPriceBean implements Serializable
     */
 
    private int page;
+   private int pageSize = 100;
    private long count;
    private List<CustomerPrice> pageItems;
 
@@ -202,7 +205,12 @@ public class CustomerPriceBean implements Serializable
 
    public int getPageSize()
    {
-      return 10;
+      return pageSize;
+   }
+
+   public void setPageSize(int pageSize)
+   {
+      this.pageSize= pageSize;
    }
 
    public CustomerPrice getExample()

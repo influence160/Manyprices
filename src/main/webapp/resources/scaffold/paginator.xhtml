@@ -8,6 +8,35 @@
 	
 	<h:panelGroup styleClass="paginator" rendered="#{paginatorBean.count gt paginatorBean.pageSize}">
 		<!-- Use commandLink, not outputLink, so that search criteria is not lost -->
+<!-- 		<h:form id="paginatorForm"> -->
+<!-- 			<h:selectOneMenu name="pageSize" value="#{paginatorBean.pageSize}" onchange="form.submit();"> -->
+<!-- 				<f:selectItem itemValue="10"/> -->
+<!-- 				<f:selectItem itemValue="20"/> -->
+<!-- 				<f:selectItem itemValue="50"/> -->
+<!-- 				<f:selectItem itemValue="100"/> -->
+<!-- 				<f:selectItem itemValue="1000"/> -->
+<!-- 			</h:selectOneMenu> -->
+<!-- 		</h:form> -->
+		<h:commandLink>
+			<f:param name="pageSize" value="10"/>
+			10
+		</h:commandLink>		
+		<h:commandLink>
+			<f:param name="pageSize" value="20"/>
+			20
+		</h:commandLink>
+		<h:commandLink>
+			<f:param name="pageSize" value="50"/>
+			50
+		</h:commandLink>		
+		<h:commandLink>
+			<f:param name="pageSize" value="100"/>
+			100
+		</h:commandLink>
+		<h:commandLink>
+			<f:param name="pageSize" value="1000"/>
+			1000
+		</h:commandLink>
 		<h:commandLink styleClass="btn btn-primary" rendered="#{paginatorBean.page gt 0}">
 			<f:param name="page" value="#{paginatorBean.page - 1}"/>
 			&lt; Previous 

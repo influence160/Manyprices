@@ -33,14 +33,15 @@
 							<h:link outcome="/product/search" value="#{msg.products}"/>
 						</li>
 						<li>
+							<h:link outcome="/entry/search" value="#{msg.entries}"/>
+						</li>
+						<li>
 							<h:link outcome="/sellItem/search" value="#{msg.sellItems}"/>
 						</li>
 					</ul>
 					<div class="navbar-right">
 							<h:form>
-							<h:commandLink action="#{migrationBean.migration()}">
-								M
-							</h:commandLink>
+							<h:link outcome="/migration/migration" value="import"/>
 							<h:commandLink action="#{languageBean.changeToFr()}">
 								<img src="#{resource['french.gif']}" alt="English" border="0" />
 							</h:commandLink>

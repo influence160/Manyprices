@@ -1,14 +1,21 @@
 package com.ott.manyprices.view;
 
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -27,6 +34,7 @@ import javax.persistence.criteria.Root;
 import com.ott.manyprices.model.Customer;
 import com.ott.manyprices.model.Entry;
 import com.ott.manyprices.model.Product;
+import com.ott.manyprices.model.SellItem;
 
 /**
  * Backing bean for Entry entities.
@@ -49,6 +57,13 @@ public class EntryBean implements Serializable
    /*
     * Support creating and retrieving Entry entities
     */
+   
+   public EntryBean() {
+	Calendar today = Calendar.getInstance();
+	dateAfter = dateFormat.format(today.getTime());
+	today.add(Calendar.DAY_OF_MONTH, 1);
+	dateBefore = dateFormat.format(today.getTime());
+   }
 
    private Long id;
 
@@ -161,10 +176,18 @@ public class EntryBean implements Serializable
     */
 
    private int page;
+   private int pageSize = 100;
    private long count;
+   private double totalPrices;
    private List<Entry> pageItems;
 
    private Entry example = new Entry();
+   
+   private static final String DATE_PATTERN = "dd-MM-yyyy";
+   private static final DateFormat dateFormat = new SimpleDateFormat(
+	    DATE_PATTERN);
+   private String dateBefore;
+   private String dateAfter;
 
    public int getPage()
    {
@@ -178,7 +201,12 @@ public class EntryBean implements Serializable
 
    public int getPageSize()
    {
-      return 10;
+      return pageSize;
+   }
+
+   public void setPageSize(int pageSize)
+   {
+      this.pageSize= pageSize;
    }
 
    public Entry getExample()
@@ -189,6 +217,22 @@ public class EntryBean implements Serializable
    public void setExample(Entry example)
    {
       this.example = example;
+   }
+
+   public String getDateBefore() {
+	return dateBefore;
+   }
+
+   public void setDateBefore(String dateBefore) {
+	this.dateBefore = dateBefore;
+   }
+
+   public String getDateAfter() {
+	return dateAfter;
+   }
+
+   public void setDateAfter(String dateAfter) {
+	this.dateAfter = dateAfter;
    }
 
    public void search()
@@ -215,6 +259,20 @@ public class EntryBean implements Serializable
       TypedQuery<Entry> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
+	if (this.count > 0) {
+	    CriteriaQuery<Object> totalPricesCriteria = builder
+		    .createQuery(Object.class);
+	    root = totalPricesCriteria.from(Entry.class);
+	    totalPricesCriteria = totalPricesCriteria.select(
+		    builder.sum(builder.prod(root.<Double> get("price"),
+			    root.<Integer> get("quantitee")))).where(
+		    getSearchPredicates(root));
+	    TypedQuery<Object> tq = this.entityManager
+		    .createQuery(totalPricesCriteria);
+	    this.totalPrices = (Double) tq.getSingleResult();
+	} else {
+	    this.totalPrices = 0;
+	}
    }
 
    private Predicate[] getSearchPredicates(Root<Entry> root)
@@ -222,7 +280,22 @@ public class EntryBean implements Serializable
 
       CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
       List<Predicate> predicatesList = new ArrayList<Predicate>();
-
+      
+	try {
+	    if (dateAfter != null && !dateAfter.trim().isEmpty()) {
+		Date dateA = dateFormat.parse(dateAfter);
+		predicatesList.add(builder.greaterThanOrEqualTo(
+			root.<Date> get("date"), dateA));
+	    }
+	    if (dateBefore != null && !dateBefore.trim().isEmpty()) {
+		Date dateB = dateFormat.parse(dateBefore);
+		predicatesList.add(builder.lessThanOrEqualTo(
+			root.<Date> get("date"), dateB));
+	    }
+	} catch (ParseException e) {
+	    throw new RuntimeException(e.getMessage(), e);
+	}
+	
       Customer customer = this.example.getCustomer();
       if (customer != null)
       {
@@ -248,6 +321,10 @@ public class EntryBean implements Serializable
       return this.count;
    }
 
+   public double getTotalPrices() {
+       return this.totalPrices;
+   }
+   
    /*
     * Support listing and POSTing back Entry entities (e.g. from inside an
     * HtmlSelectOneMenu)

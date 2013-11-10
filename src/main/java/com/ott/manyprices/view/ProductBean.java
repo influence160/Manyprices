@@ -11,6 +11,7 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -170,6 +171,7 @@ public class ProductBean implements Serializable
     */
 
    private int page;
+   private int pageSize = 20;
    private long count;
    private double totalPrices;
    private List<Product> pageItems;
@@ -188,7 +190,12 @@ public class ProductBean implements Serializable
 
    public int getPageSize()
    {
-      return 10;
+      return pageSize;
+   }
+
+   public void setPageSize(int pageSize)
+   {
+      this.pageSize= pageSize;
    }
 
    public Product getExample()
@@ -226,18 +233,20 @@ public class ProductBean implements Serializable
       query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
       this.pageItems = query.getResultList();
       
-      CriteriaQuery<Object> totalPricesCriteria = builder.createQuery(Object.class);
-      root = totalPricesCriteria.from(Product.class);
-      Root<ProductPrice> ppRoot = totalPricesCriteria.from(ProductPrice.class);
-//      Metamodel m = this.entityManager.getMetamodel();
-//      EntityType<Product> productMM = m.entity(Product.class);
-//      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(root.get("purchasePrice.price"), root.get("quantitee")))).where(getSearchPredicates(root));
-      Predicate[] predicates = Arrays.copyOf(getSearchPredicates(root), getSearchPredicates(root).length + 1);
-      predicates[predicates.length - 1] = builder.equal(root.<ProductPrice> get("purchasePrice"), ppRoot.get("product"));
-      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(ppRoot.<Double> get("price"), root.<Integer> get("quantitee"))))
-    		  .where(predicates);
-      TypedQuery<Object> tq = this.entityManager.createQuery(totalPricesCriteria);
-      this.totalPrices = (Double) tq.getSingleResult();
+      if (this.count > 0) {
+	      CriteriaQuery<Object> totalPricesCriteria = builder.createQuery(Object.class);
+	      root = totalPricesCriteria.from(Product.class);
+	      Root<ProductPrice> ppRoot = totalPricesCriteria.from(ProductPrice.class);
+	      Predicate[] predicates = Arrays.copyOf(getSearchPredicates(root), getSearchPredicates(root).length + 1);
+	      predicates[predicates.length - 1] = builder.equal(root.<ProductPrice> get("purchasePrice"), ppRoot.get("product"));
+	      totalPricesCriteria = totalPricesCriteria.select(builder.sum(builder.prod(ppRoot.<Double> get("price"), root.<Integer> get("quantitee"))))
+	    		  .where(predicates);
+	      TypedQuery<Object> tq = this.entityManager.createQuery(totalPricesCriteria);
+	      this.totalPrices = (Double) tq.getSingleResult();
+      }
+      else {
+	  this.totalPrices = 0;
+      }
    }
 
    private Predicate[] getSearchPredicates(Root<Product> root)
@@ -280,8 +289,8 @@ public class ProductBean implements Serializable
       return this.count;
    }
    
-   public String getTotalPrices() {
-	   return String.valueOf(this.totalPrices);
+   public double getTotalPrices() {
+       return this.totalPrices;
    }
 
    /*
@@ -292,8 +301,9 @@ public class ProductBean implements Serializable
    public List<Product> getAll()
    {
 
-      CriteriaQuery<Product> criteria = this.entityManager.getCriteriaBuilder().createQuery(Product.class);
-      return this.entityManager.createQuery(criteria.select(criteria.from(Product.class))).getResultList();
+//      CriteriaQuery<Product> criteria = this.entityManager.getCriteriaBuilder().createQuery(Product.class);
+//      return this.entityManager.createQuery(criteria.select(criteria.from(Product.class))).getResultList();
+       return this.entityManager.createNamedQuery(Product.QUERY_GET_ALL).getResultList();
    }
 
    @Resource

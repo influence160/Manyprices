@@ -28,13 +28,18 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findProductByName", query="FROM Customer c where name = :name")
+    @NamedQuery(name=Product.QUERY_FIND_BY_NAME, query="FROM Product p where p.name = :name"),
+    @NamedQuery(name=Product.QUERY_GET_ALL, query="SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.purchasePrice" +
+    		" LEFT JOIN FETCH p.sellItems s" + 
+    		" LEFT JOIN FETCH p.entries e" +
+    		" order by p.name asc")
 	
 })
 public class Product implements Serializable
 {
 
-   public static final String QUERY_FIND_BY_NAME = "findProductByName";
+    public static final String QUERY_FIND_BY_NAME = "findProductByName";
+    public static final String QUERY_GET_ALL = "getAllProducts";
    
    @Id
    private @GeneratedValue(strategy = GenerationType.AUTO)
@@ -43,6 +48,7 @@ public class Product implements Serializable
    @Version
    private @Column(name = "version")
    int version = 0;
+   @Column(unique=true)
    private String name;
    private String dimention;
    private String description;
@@ -53,6 +59,10 @@ public class Product implements Serializable
    @ManyToOne(fetch = FetchType.LAZY)
    private Category category;
    private Date dateUpdated;
+   @OneToMany(cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY, mappedBy = "product")
+   private Set<SellItem> sellItems = new HashSet<SellItem>();
+   @OneToMany(cascade = { CascadeType.REMOVE }, fetch = FetchType.LAZY, mappedBy = "product")
+   private Set<Entry> entries = new HashSet<Entry>();
    private int quantitee;
    @Column(length=1024)
    @Size(max=1024)
@@ -67,7 +77,6 @@ public class Product implements Serializable
 	   this();
 	   this.id = id;
    }
-
 
    @PreUpdate
    @PrePersist
@@ -139,8 +148,14 @@ public class Product implements Serializable
    
    public void setPurchasePrice(CustomerPrice purchasePrice) 
    {
-	  ProductPrice productPrice = new ProductPrice(purchasePrice);
-	  setPurchasePrice(productPrice);
+       if(this.purchasePrice == null) {
+	   ProductPrice productPrice = new ProductPrice(purchasePrice);
+	   setPurchasePrice(productPrice);
+       }
+       else {
+	   this.purchasePrice.setCustomer(purchasePrice.getCustomer());
+	   this.purchasePrice.setPrice(purchasePrice.getPrice());
+       }
    }
 
    public Set<CustomerPrice> getPrices() 
@@ -153,6 +168,11 @@ public class Product implements Serializable
       this.prices = prices;
    }
 
+   public void addPrice(CustomerPrice customerPrice) {
+	prices.add(customerPrice);
+	customerPrice.setProduct(this);
+   }
+    
    public Category getCategory()
    {
       return category;
@@ -175,6 +195,25 @@ public class Product implements Serializable
    public int getQuantitee() {
 	  return quantitee;
    }
+   
+//   public int getQuantiteeEnStock() {
+//       int sotck = this.quantitee;
+//       for (SellItem sellItem : sellItems) {
+////	   if (this.getDateUpdated().after(sellItem.getDate())) {
+//	       sotck -= sellItem.getQuantitee();
+////	   }
+//       }
+//       for (Entry entry : entries) {
+////	   if (this.getDateUpdated().after(entry.getDate())) {
+//	       sotck += entry.getQuantitee();
+////	   }
+//       }
+//       return sotck;
+//   }
+   
+  // public void setQuantiteeEnStock(int quantiteeEnStock) {
+  //     this.quantitee = quantiteeEnStock;
+  // }
    
    @Transient
    public float getTotalPrice() {
@@ -251,4 +290,5 @@ public class Product implements Serializable
       }
       return super.hashCode();
    }
+
 }

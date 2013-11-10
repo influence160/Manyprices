@@ -22,7 +22,7 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({ 
-    @NamedQuery(name = "findCustomerByName", query = "FROM Customer c where name = :name")
+    @NamedQuery(name = Customer.QUERY_FIND_BY_NAME, query = "FROM Customer c where c.name = :name")
 })
 public class Customer implements Serializable {
 
@@ -40,7 +40,7 @@ public class Customer implements Serializable {
     private String name;
     private String description;
     private String telephone;
-    @OneToMany(mappedBy = "id.customer", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "id.customer", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "customer", cascade = { CascadeType.ALL })
     private Set<Entry> entries = new HashSet<Entry>();
@@ -107,6 +107,11 @@ public class Customer implements Serializable {
 
     public void setEntries(Set<Entry> entries) {
 	this.entries = entries;
+    }
+    
+    public void addEntry(Entry entry) {
+	this.entries.add(entry);
+	entry.setCustomer(this);
     }
 
     public void removeEntry(Entry entry) {

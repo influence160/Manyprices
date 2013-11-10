@@ -5,6 +5,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
+import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -30,6 +32,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 import com.ott.manyprices.model.Product;
+import com.ott.manyprices.model.ProductPrice;
 import com.ott.manyprices.model.SellItem;
 
 /**
@@ -38,174 +41,170 @@ import com.ott.manyprices.model.SellItem;
  * This class provides CRUD functionality for all SellItem entities. It focuses
  * purely on Java EE 6 standards (e.g. <tt>&#64;ConversationScoped</tt> for
  * state management, <tt>PersistenceContext</tt> for persistence,
- * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD framework or
- * custom base class.
+ * <tt>CriteriaBuilder</tt> for searches) rather than introducing a CRUD
+ * framework or custom base class.
  */
 
 @Named
 @Stateful
 @ConversationScoped
-public class SellItemBean implements Serializable
-{
+public class SellItemBean implements Serializable {
 
-   private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-   /*
-    * Support creating and retrieving SellItem entities
-    */
-   
-   public SellItemBean() {
-       Calendar today = Calendar.getInstance();
-       dateAfter = dateFormat.format(today.getTime());
-       today.add(Calendar.DAY_OF_MONTH, 1);
-       dateBefore = dateFormat.format(today.getTime());
-   }
+    /*
+     * Support creating and retrieving SellItem entities
+     */
 
-   private Long id;
+    public SellItemBean() {
+	Calendar today = Calendar.getInstance();
+	dateAfter = dateFormat.format(today.getTime());
+	today.add(Calendar.DAY_OF_MONTH, 1);
+	dateBefore = dateFormat.format(today.getTime());
+    }
 
-   public Long getId()
-   {
-      return this.id;
-   }
+    private Long id;
+    private Long productId;
 
-   public void setId(Long id)
-   {
-      this.id = id;
-   }
+    public Long getId() {
+	return this.id;
+    }
 
-   private SellItem sellItem;
+    public void setId(Long id) {
+	this.id = id;
+    }
 
-   public SellItem getSellItem()
-   {
-      return this.sellItem;
-   }
+    public Long getProductId() {
+        return productId;
+    }
 
-   @Inject
-   private Conversation conversation;
+    public void setProductId(Long productId) {
+        this.productId = productId;
+    }
 
-   @PersistenceContext(type = PersistenceContextType.EXTENDED)
-   private EntityManager entityManager;
+    private SellItem sellItem;
 
-   public String create()
-   {
+    public SellItem getSellItem() {
+	return this.sellItem;
+    }
 
-      this.conversation.begin();
-      return "create?faces-redirect=true";
-   }
+    @Inject
+    private Conversation conversation;
 
-   public void retrieve()
-   {
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    private EntityManager entityManager;
 
-      if (FacesContext.getCurrentInstance().isPostback())
-      {
-         return;
-      }
+    public String create() {
 
-      if (this.conversation.isTransient())
-      {
-         this.conversation.begin();
-      }
+	this.conversation.begin();
+	return "create?faces-redirect=true";
+    }
 
-      if (this.id == null)
-      {
-         this.sellItem = this.example;
-      }
-      else
-      {
-         this.sellItem = findById(getId());
-      }
-   }
+    public void retrieve() {
 
-   public SellItem findById(Long id)
-   {
+	if (FacesContext.getCurrentInstance().isPostback()) {
+	    return;
+	}
 
-      return this.entityManager.find(SellItem.class, id);
-   }
+	if (this.conversation.isTransient()) {
+	    this.conversation.begin();
+	}
 
-   /*
-    * Support updating and deleting SellItem entities
-    */
+	if (this.id == null) {
+	    this.sellItem = this.example;
+	} else {
+	    this.sellItem = findById(getId());
+	}
+	
+	if (this.productId != null) {
+	    Product pr = entityManager.find(Product.class, productId);
+	    this.sellItem.setProduct(pr);
+	    this.sellItem.setUnitPrice(pr.getPurchasePrice().getPrice() * 135 / 100);
+	}
+    }
 
-   public String update()
-   {
-      this.conversation.end();
+    public SellItem findById(Long id) {
 
-      try
-      {
-         if (this.id == null)
-         {
-            this.entityManager.persist(this.sellItem);
-            return "search?faces-redirect=true";
-         }
-         else
-         {
-            this.entityManager.merge(this.sellItem);
-            return "view?faces-redirect=true&id=" + this.sellItem.getId();
-         }
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
+	return this.entityManager.find(SellItem.class, id);
+    }
 
-   public String delete()
-   {
-      this.conversation.end();
+    /*
+     * Support updating and deleting SellItem entities
+     */
 
-      try
-      {
-         this.entityManager.remove(findById(getId()));
-         this.entityManager.flush();
-         return "search?faces-redirect=true";
-      }
-      catch (Exception e)
-      {
-         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(e.getMessage()));
-         return null;
-      }
-   }
+    public String update() {
+	this.conversation.end();
 
-   /*
-    * Support searching SellItem entities with pagination
-    */
+	try {
+	    if (this.id == null) {
+		this.entityManager.persist(this.sellItem);
+		return "search?faces-redirect=true";
+	    } else {
+		this.entityManager.merge(this.sellItem);
+		return "view?faces-redirect=true&id=" + this.sellItem.getId();
+	    }
+	} catch (Exception e) {
+	    FacesContext.getCurrentInstance().addMessage(null,
+		    new FacesMessage(e.getMessage()));
+	    return null;
+	}
+    }
 
-   private int page;
-   private long count;
-   private List<SellItem> pageItems;
+    public String delete() {
+	this.conversation.end();
 
-   private SellItem example = new SellItem();
-   private static final String DATE_PATTERN = "dd-MM-yyyy";
-   private static final DateFormat dateFormat = new SimpleDateFormat(DATE_PATTERN);
-   private String dateBefore;
-   private String dateAfter;
+	try {
+	    this.entityManager.remove(findById(getId()));
+	    this.entityManager.flush();
+	    return "search?faces-redirect=true";
+	} catch (Exception e) {
+	    FacesContext.getCurrentInstance().addMessage(null,
+		    new FacesMessage(e.getMessage()));
+	    return null;
+	}
+    }
 
-   public int getPage()
-   {
-      return this.page;
-   }
+    /*
+     * Support searching SellItem entities with pagination
+     */
 
-   public void setPage(int page)
-   {
-      this.page = page;
-   }
+    private int page;
+    private int pageSize = 100;
+    private long count;
+    private double totalPrices;
+    private List<SellItem> pageItems;
 
-   public int getPageSize()
-   {
-      return 10;
-   }
+    private SellItem example = new SellItem();
+    private static final String DATE_PATTERN = "dd-MM-yyyy";
+    private static final DateFormat dateFormat = new SimpleDateFormat(
+	    DATE_PATTERN);
+    private String dateBefore;
+    private String dateAfter;
 
-   public SellItem getExample()
-   {
-      return this.example;
-   }
+    public int getPage() {
+	return this.page;
+    }
 
-   public void setExample(SellItem example)
-   {
-      this.example = example;
-   }
-   
+    public void setPage(int page) {
+	this.page = page;
+    }
+
+    public int getPageSize() {
+	return pageSize;
+    }
+
+    public void setPageSize(int pageSize) {
+	this.pageSize = pageSize;
+    }
+
+    public SellItem getExample() {
+	return this.example;
+    }
+
+    public void setExample(SellItem example) {
+	this.example = example;
+    }
+
     public String getDateBefore() {
 	return dateBefore;
     }
@@ -226,130 +225,199 @@ public class SellItemBean implements Serializable
 	this.page = 0;
     }
 
-   public void paginate()
-   {
+    public void paginate() throws ParseException {
 
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+	CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
 
-      // Populate this.count
+	// Populate this.count
+	CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
+	Root<SellItem> root = countCriteria.from(SellItem.class);
+	countCriteria = countCriteria.select(builder.count(root)).where(
+		getSearchPredicates(root));
+	this.count = this.entityManager.createQuery(countCriteria)
+		.getSingleResult();
 
-      CriteriaQuery<Long> countCriteria = builder.createQuery(Long.class);
-      Root<SellItem> root = countCriteria.from(SellItem.class);
-      countCriteria = countCriteria.select(builder.count(root)).where(getSearchPredicates(root));
-      this.count = this.entityManager.createQuery(countCriteria).getSingleResult();
+//	 Populate this.pageItems
+	 CriteriaQuery<SellItem> criteria =
+	 builder.createQuery(SellItem.class);
+	 root = criteria.from(SellItem.class);
+	 TypedQuery<SellItem> query =
+	 this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
+	 query.setFirstResult(this.page *
+	 getPageSize()).setMaxResults(getPageSize());
+	 this.pageItems = query.getResultList();
 
-      // Populate this.pageItems
+//	String jpq = "SELECT s FROM SellItem s "
+//		+ " LEFT JOIN FETCH s.product p"
+//		+ " LEFT JOIN FETCH p.purchasePrice" + " WHERE 1=1 ";
+//	String where = "";
+//	if (dateAfter != null && !dateAfter.trim().isEmpty()) {
+//	    where += " AND s.date >= :dateAfter";
+//	}
+//	if (dateBefore != null && !dateBefore.trim().isEmpty()) {
+//	    where += " AND s.date <= :dateBefore";
+//	}
+//	Product product = this.example.getProduct();
+//	if (product != null) {
+//	    where += " AND s.product = :product";
+//	}
+//
+//	jpq += where;
+//	TypedQuery<SellItem> query = this.entityManager.createQuery(jpq,
+//		SellItem.class);
+//
+//	if (dateAfter != null && !dateAfter.trim().isEmpty()) {
+//	    Date dateA = dateFormat.parse(dateAfter);
+//	    query.setParameter("dateAfter", dateA);
+//	}
+//	if (dateBefore != null && !dateBefore.trim().isEmpty()) {
+//	    Date dateB = dateFormat.parse(dateBefore);
+//	    query.setParameter("dateBefore", dateB);
+//	}
+//	if (product != null) {
+//	    query.setParameter("product", product);
+//	}
+//	this.pageItems = query.getResultList();
 
-      CriteriaQuery<SellItem> criteria = builder.createQuery(SellItem.class);
-      root = criteria.from(SellItem.class);
-      TypedQuery<SellItem> query = this.entityManager.createQuery(criteria.select(root).where(getSearchPredicates(root)));
-      query.setFirstResult(this.page * getPageSize()).setMaxResults(getPageSize());
-      this.pageItems = query.getResultList();
-   }
+	if (this.count > 0) {
+	    CriteriaQuery<Object> totalPricesCriteria = builder
+		    .createQuery(Object.class);
+	    root = totalPricesCriteria.from(SellItem.class);
+	    totalPricesCriteria = totalPricesCriteria.select(
+		    builder.sum(builder.prod(root.<Double> get("unitPrice"),
+			    root.<Integer> get("quantitee")))).where(
+		    getSearchPredicates(root));
+	    TypedQuery<Object> tq = this.entityManager
+		    .createQuery(totalPricesCriteria);
+	    this.totalPrices = (Double) tq.getSingleResult();
+	} else {
+	    this.totalPrices = 0;
+	}
+    }
 
-   private Predicate[] getSearchPredicates(Root<SellItem> root)
-   {
+    private Predicate[] getSearchPredicates(Root<SellItem> root) {
 
-      CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
-      List<Predicate> predicatesList = new ArrayList<Predicate>();
+	CriteriaBuilder builder = this.entityManager.getCriteriaBuilder();
+	List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-      try {
-          if (dateAfter != null && !dateAfter.trim().isEmpty())
-          {
-             Date dateA = dateFormat.parse(dateAfter);
-             predicatesList.add(builder.greaterThanOrEqualTo(root.<Date> get("date"), dateA));
-          }
-          if (dateBefore != null && !dateBefore.trim().isEmpty())
-          {
-              Date dateB  = dateFormat.parse(dateBefore);
-              predicatesList.add(builder.lessThanOrEqualTo(root.<Date> get("date"), dateB));
-           }
-      } catch (ParseException e) {
-            throw new RuntimeException(e.getMessage(), e);
-      }
-      Product product = this.example.getProduct();
-      if (product != null)
-      {
-         predicatesList.add(builder.equal(root.get("product"), product));
-      }
+	try {
+	    if (dateAfter != null && !dateAfter.trim().isEmpty()) {
+		Date dateA = dateFormat.parse(dateAfter);
+		predicatesList.add(builder.greaterThanOrEqualTo(
+			root.<Date> get("date"), dateA));
+	    }
+	    if (dateBefore != null && !dateBefore.trim().isEmpty()) {
+		Date dateB = dateFormat.parse(dateBefore);
+		predicatesList.add(builder.lessThanOrEqualTo(
+			root.<Date> get("date"), dateB));
+	    }
+	} catch (ParseException e) {
+	    throw new RuntimeException(e.getMessage(), e);
+	}
+	String remarque = this.example.getRemarque();
+	if (remarque != null && !remarque.isEmpty())
+	{
+	    predicatesList.add(builder.like(root.<String> get("remarque"), '%' + remarque + '%'));
+	}
+	Product product = this.example.getProduct();
+	if (product != null) {
+	    predicatesList.add(builder.equal(root.get("product"), product));
+	}
 
-      return predicatesList.toArray(new Predicate[predicatesList.size()]);
-   }
+	return predicatesList.toArray(new Predicate[predicatesList.size()]);
+    }
 
-   public List<SellItem> getPageItems()
-   {
-      return this.pageItems;
-   }
+    private String getSearchWhere() {
+	String where = "";
+	if (dateAfter != null && !dateAfter.trim().isEmpty()) {
+	    // Date dateA = dateFormat.parse(dateAfter);
+	    where += " date AFTER :dateAfter";
+	}
+	if (dateBefore != null && !dateBefore.trim().isEmpty()) {
+	    // Date dateB = DATEFORMAT.parse(dateBefore);
+	    where += " date BEFORE :dateAfter";
+	}
+	Product product = this.example.getProduct();
+	if (product != null) {
+	    where += " s.product = :product";
+	}
 
-   public long getCount()
-   {
-      return this.count;
-   }
+	return where;
+    }
 
-   /*
-    * Support listing and POSTing back SellItem entities (e.g. from inside an
-    * HtmlSelectOneMenu)
-    */
+    public List<SellItem> getPageItems() {
+	return this.pageItems;
+    }
 
-   public List<SellItem> getAll()
-   {
+    public long getCount() {
+	return this.count;
+    }
 
-      CriteriaQuery<SellItem> criteria = this.entityManager.getCriteriaBuilder().createQuery(SellItem.class);
-      return this.entityManager.createQuery(criteria.select(criteria.from(SellItem.class))).getResultList();
-   }
+    public double getTotalPrices() {
+        return this.totalPrices;
+    }
+    
+    /*
+     * Support listing and POSTing back SellItem entities (e.g. from inside an
+     * HtmlSelectOneMenu)
+     */
 
-   @Resource
-   private SessionContext sessionContext;
+    public List<SellItem> getAll() {
 
-   public Converter getConverter()
-   {
+	CriteriaQuery<SellItem> criteria = this.entityManager
+		.getCriteriaBuilder().createQuery(SellItem.class);
+	return this.entityManager.createQuery(
+		criteria.select(criteria.from(SellItem.class))).getResultList();
+    }
 
-      final SellItemBean ejbProxy = this.sessionContext.getBusinessObject(SellItemBean.class);
+    @Resource
+    private SessionContext sessionContext;
 
-      return new Converter()
-      {
+    public Converter getConverter() {
 
-         @Override
-         public Object getAsObject(FacesContext context, UIComponent component, String value)
-         {
+	final SellItemBean ejbProxy = this.sessionContext
+		.getBusinessObject(SellItemBean.class);
 
-            return ejbProxy.findById(Long.valueOf(value));
-         }
+	return new Converter() {
 
-         @Override
-         public String getAsString(FacesContext context, UIComponent component, Object value)
-         {
+	    @Override
+	    public Object getAsObject(FacesContext context,
+		    UIComponent component, String value) {
 
-            if (value == null)
-            {
-               return "";
-            }
+		return ejbProxy.findById(Long.valueOf(value));
+	    }
 
-            return String.valueOf(((SellItem) value).getId());
-         }
-      };
-   }
+	    @Override
+	    public String getAsString(FacesContext context,
+		    UIComponent component, Object value) {
 
-   /*
-    * Support adding children to bidirectional, one-to-many tables
-    */
+		if (value == null) {
+		    return "";
+		}
 
-   private SellItem add = new SellItem();
+		return String.valueOf(((SellItem) value).getId());
+	    }
+	};
+    }
 
-   public SellItem getAdd()
-   {
-      return this.add;
-   }
+    /*
+     * Support adding children to bidirectional, one-to-many tables
+     */
 
-   public SellItem getAdded()
-   {
-      SellItem added = this.add;
-      this.add = new SellItem();
-      return added;
-   }
-   
-   public static void main(String[] args) {
-       System.out.println(dateFormat.format(new Date()));
-   }
-   
+    private SellItem add = new SellItem();
+
+    public SellItem getAdd() {
+	return this.add;
+    }
+
+    public SellItem getAdded() {
+	SellItem added = this.add;
+	this.add = new SellItem();
+	return added;
+    }
+
+    public static void main(String[] args) {
+	System.out.println(dateFormat.format(new Date()));
+    }
+
 }

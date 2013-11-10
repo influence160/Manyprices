@@ -9,8 +9,37 @@
 	template="/resources/scaffold/pageTemplate.xhtml">
 
 	<f:metadata>
-<!-- 		<f:event type="preRenderView" listener="#{migrationBean.migration}"/> -->
 	</f:metadata>
 
-	#{migrationBean.migration()}
+	<ui:param name="pageTitle" value="Search Product entities"/>
+
+	<ui:define name="header">
+		#{msgPro['header.search']}
+	</ui:define>
+
+	<ui:define name="subheader">
+		#{msgPro['search.entities']}
+	</ui:define>
+
+	<ui:define name="footer"/>
+	
+	<ui:define name="main">
+		<h:form id="create">
+			<h:messages globalOnly="true" styleClass="error"/>
+
+			<h:panelGrid columnClasses="label,component,required" columns="3">
+				
+				<h:outputLabel for="customerBeanCustomerName" value="#{msg.file}:"/>
+				<h:panelGroup>
+					<h:inputText id="customerBeanCustomerName" value="#{migrationBean.fileName}"/>
+					<h:message for="customerBeanCustomerName" styleClass="error"/>
+				</h:panelGroup>
+			</h:panelGrid>
+			<div class="buttons">
+				<h:panelGroup styleClass="buttons">
+					<h:commandLink value="#{msg.import}" action="#{migrationBean.migration()}" styleClass="btn btn-primary"/>
+				</h:panelGroup>
+			</div>
+		</h:form>
+	</ui:define>
 </ui:composition>

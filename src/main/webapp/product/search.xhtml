@@ -8,6 +8,7 @@
 
 	<f:metadata>
 		<f:viewParam name="page" value="#{productBean.page}"/>
+		<f:viewParam name="pageSize" value="#{productBean.pageSize}"/>
 		<f:event type="preRenderView" listener="#{productBean.paginate}"/>
 	</f:metadata>
 
@@ -94,7 +95,7 @@
 				</h:column>
 				<h:column>
 					<f:facet name="header">
-						<h:outputText value="#{msgPro.quantitee}"/>
+						<h:outputText value="#{msgPro.stock}"/>
 					</f:facet>
 					<h:link outcome="/product/view">
 						<f:param name="id" value="#{_item.id}"/>
@@ -116,7 +117,9 @@
 					</f:facet>
 					<h:link outcome="/product/view">
 						<f:param name="id" value="#{_item.id}"/>
-						<h:outputText id="itemTotalPrice" value="#{_item.totalPrice}"/>
+						<h:outputText id="itemTotalPrice" value="#{_item.totalPrice}">
+							<f:convertNumber maxFractionDigits="3"/>
+						</h:outputText>
 					</h:link>
 				</h:column>
 				<h:column>
@@ -135,7 +138,10 @@
 				<ui:param name="paginatorBean" value="#{productBean}"/>
 			</ui:include>
 			<div class="total">
-			#{msgPro['totalPrices']} : #{productBean.totalPrices}
+			#{msgPro['totalPrices']} : 
+			<h:outputText value="#{productBean.totalPrices}" >
+				<f:convertNumber maxFractionDigits="3"/>
+			</h:outputText>
 			</div>
 		</h:form>
 			

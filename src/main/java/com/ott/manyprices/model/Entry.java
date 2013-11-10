@@ -24,7 +24,7 @@ public class Entry {
     Long id = null;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToOne
+    @OneToOne(fetch=FetchType.LAZY)
     private Product product;
     @Min(1)
     private int quantitee;

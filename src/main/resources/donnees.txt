@@ -1,1 +1,58 @@
-1	Mt Blanc	FRMB45	Frigo Mt Blanc 45	Monc, Bey	2	0	2	650,000	1300,000	890,000	1780,000	877,500
+1	Electro Menager	FRMB45	Frigo Mt Blanc 45	Monc, Bey	2	0	2	650,000	1300,000	890,000	1780,000	877,500		
+2	Electro Menager	FRMB35	Frigo Mt Blanc35	Monc, Bey	3	0	3	550,000	1650,000	780,000	2340,000	742,500		
+3	Electro Menager	FRMB30	Frigo MtBlanc 30	Sodig	5	0	5	450,000	2250,000	390,000	1950,000	607,500		
+4	Electro Menager	FRMB23	Frigo Mt Blanc 23	Sodig	1	0	1	320,000	420,000	430,000	430,000	432,000		
+5	Electro Menager	 FRLG392	FigoLG 392L	Monc, Bey	2	0	2	920,000	1840,000	1380,000	2760,000	1242,000		
+999	Electro Menager	FRBE485	Frigo Beko 485	Kaabi	1	0	1	780,000	780,000	1090,000	1090,000	1053,000		
+6	Electro Menager	CLmi1200	Clim Midia 1200 cf	Sodecom	6	0	6	835,000	5010,000	1180,000	7080,000	1127,250		
+7	Electro Menager	cLmi9000	clim Midia 9000 cf	Sodecom	1	0	1	720,000	720,000	980,000	980,000	972,000		
+8	Electro Menager	MLBe 5000	Mach, a Laver Beko 5Kg	sodig	2	0	2	460,000	920,000	670,000	1340,000	621,000		
+9	Electro Menager	Cui 0001	Gaz Universel 55/55	Sodecom	1	0	1	337,000	337,000	478,000	478,000	454,950		
+10	Electro Menager	Cui 0002	Gaz Ideal B-B	Kaabi	4	0	4	240,000	960,000	368,000	1472,000	324,000		
+11	Electro Menager	Cui 005	Gaz Atas 1500	Sodecom	5	1	4	225,000	1125,000	348,000	1740,000	303,750	 348,000   	19/09/2013
+12	Electro Menager	Cui 0003	Gaz Confort Line KS	Sodig	2	0	2	215,000	430,000	298,000	596,000	290,250	   	
+13	Electro Menager	Cui 0004	Gaz Confort Line KB	Sodig	2	0	2	185,000	370,000	248,000	496,000	249,750		
+14	Electro Menager	MLNC001	Mach, a Laver 4kg 	Monc, Bey	1	0	1	85,000	85,000	120,000	120,000	114,750		
+999	Electro Menager	MLMI011	Machine a laver media 11kg	Monc, Bey	1	0	1	260,000	260,000	398,000	398,000	351,000		
+15	Electro Menager	MLmi007	Mach, a Laver Midea 8 kg	Sodig	1	1	0	190,000	190,000	276,000	276,000	256,500	 250,000   	30/09/2013
+16	Electro Menager	ML O007	Mach, a Laver Oriont 7 kg	Kaabi	5	0	5	170,000	850,000	238,000	1190,000	229,500		
+17	Electro Menager	ML O008	Mach, a Laver Oriont 8 kg	Kaabi	2	1	1	195,000	390,000	276,000	552,000	263,250	 276,000   	18/09/2013
+18	Electro Menager	MLC008	Mach, a Laver Confort 8 kg	Sodig	2	0	2	200,000	400,000	276,000	552,000	270,000		
+19	Electro Menager	MLC0011	Mah, a Laver Confort 11 kg	Sodig	1	0	1	270,000	270,000	386,000	386,000	364,500		
+20	Electro Menager	PLCl001	Plaque 4feux Cermique Confort Line	Sodig	2	0	2	142,000	284,000	240,000	480,000	191,700		
+21	Electro Menager	PLEL001	Plaque 4 Feux Blanc	Sodecom	1	0	1	225,000	225,000	320,000	320,000	303,750		
+22	Electro Menager	PLEL002	plaque 4 Feux Inox 60441 X	Sodecom	2	0	2	210,000	420,000	300,000	600,000	283,500		
+23	Electro Menager	HAEL001	Hote 60 Blanc Elba	Sodecom	1	0	1	65,000	65,000	89,000	89,000	87,750		
+24	Electro Menager	HAEL001	hote 60 Inox Elba  Stella	Sodecom	1	1	0	106,000	106,000	120,000	120,000	143,100	 100,000   	02/10/2013
+25	Electro Menager	FOEL001	Four enctre  Elect  Elba	Sodecom	1	0	1	540,000	540,000	720,000	720,000	729,000		
+26	Electro Menager	RP NS001	Rechaud Plat 3 Feux N S	Kaabi	5	0	5	29,000	145,000	41,000	205,000	39,150		
+27	Electro Menager	RP MG002	Rechaud Plat 3 Feux M S	Kaabi	1	0	1	22,000	22,000	31,000	31,000	29,700		
+28	Electro Menager	RPORS004	Rechaud Plat 4 Feux Oriont	Kaabi	3	0	3	55,000	165,000	78,000	234,000	74,250		
+29	Electro Menager	ChEA0001	Chauf Eaux  Chauffoteaux	Someq	1	0	1	325,000	325,000	425,000	425,000	438,750		
+30	Electro Menager	Chg0001	Chauffage a Gaz Coala	Kaabi	2	0	2	90,000	180,000	141,000	282,000	121,500		
+31	Electro Menager	Chg0002	chauffage a Gaz Mega Star	Kaabi	1	0	1	98,000	98,000	158,000	158,000	132,300		
+31	Electro Menager	ChEL002	Chauffage Electrique 2 Grilles	Kaabi	2	0	2	20,000	40,000	30,000	60,000	27,000		
+32	Electro Menager	ChEl003	chauffage Electrique 3 Grilles	Kaabi	1	0	1	24,000	24,000	35,000	35,000	32,400		
+33	Electro Menager	ChEl0003	Chauffage Electrique 3 Lampes	Kaabi	4	0	4	24,000	96,000	35,000	140,000	32,400		
+34	Electro Menager	Mi On001	Micro Onde media 	Kaabi	1	1	0	105,000	105,000	150,000	150,000	141,750	 130,000   	16/09/2013
+35	Electro Menager	FOEL002	Four Electriques S/ tourne Broche	Kaabi	2	0	2	60,000	120,000	86,000	172,000	81,000		
+36	Electro Menager	FOEL003	Four electriques Avec  tourne Broche	Kaabi	3	0	3	70,000	210,000	104,000	312,000	94,500		
+37	Electro Menager	FOEL004	Four Electique  Decolux 45L	Sodecom	1	0	1	140,000	140,000	198,000	198,000	189,000		
+38	Electro Menager	Te0001	Tete Parabole Simple	Monc, Bey	10	0	10	3,000	30,000	5,000	50,000	4,050		
+39	Electro Menager	Te0002	tete Parabole Double	Monc, Bey	7	0	7	9,000	63,000	15,000	105,000	12,150		
+40	Electro Menager	Pa 0001	Parabole 60 cm	Monc, Bey	2	0	2	13,000	26,000	17,500	35,000	17,550		
+41	Electro Menager	Pa0002	Parabole 80 cm	Monc, Bey	2	0	2	28,000	56,000	35,000	70,000	37,800		
+42	Electro Menager	VB001	V box 2	Monc, Bey	1	0	1	20,000	20,000	30,000	30,000	27,000		
+43	Electro Menager	Ver001	Verin	Monc, Bey	1	0	1	20,000	20,000	30,000	30,000	27,000		
+44	Electro Menager	Rec 001	Recpteur Star Sat	Monc, Bey	1	0	1	25,000	25,000	35,000	35,000	33,750		
+45	Electro Menager	Sup001	Support Parabole Fixe	Monc, Bey	1	0	1	4,500	4,500	10,000	10,000	6,075		
+46	Electro Menager	Sup002	support Parabole Mobile	Monc, Bey	3	0	3	15,000	45,000	20,000	60,000	20,250		
+47	Electro Menager	TATV001	Table T V Plazma Inox	Monc, Bey	1	0	1	170,000	170,000	270,000	270,000	229,500		
+48	Electro Menager	ChCL010	Chauf. Bain Confort Line 10L	Sodig	1	0	1	175,000	175,000	260,000	260,000	236,250		
+49	Electro Menager	ChCL010	Chauf. Bain Confort Line 6L	Sodig	1	0	1	100,000	100,000	145,000	145,000	135,000		
+50	Electro Menager	TVSO040	Téléviseur SONY 40p	Monc, Bey	1	1	0	820,000	820,000	1080,000	1080,000	1107,000	 1 100,000   	23/09/2013
+51	Electro Menager	TVNS055	Televiseur New Star 55	Monc, Bey	1	1	0	220,000	220,000	295,000	295,000	297,000	 295,000   	28/09/2013
+52	Electro Menager	MOHA001	Micro Onde  Hair	Monc, Bey	1	1	0	130,000	130,000	180,000	180,000	175,500	 170,000   	02/10/2013
+53	Electro Menager	PLEL003	plaque 4 Feux Inox 60441 X	sodecom	1	1	0	243,000	243,000	328,000	328,000	328,050	 300,000   	02/10/2013
+54	Electro Menager	HAEL002	hote 60 Blanc  Elba  Stella	Sodecom	1	0	1	98,000	98,000	130,000	130,000	132,300		 
+55	Electro Menager	HAEL003	hote 60 Maron Elba  Stella	Sodecom	1	0	1	98,000	98,000	130,000	130,000	132,300		

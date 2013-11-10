@@ -15,10 +15,23 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+      <dependency>
+        <groupId>org.richfaces</groupId>
+        <artifactId>richfaces-bom</artifactId>
+        <version>4.3.2.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.richfaces</groupId>
+        <artifactId>richfaces-bom</artifactId>
+        <version>4.3.2.Final</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
     </dependencies>
   </dependencyManagement>
   <dependencies>
-  <!-- Added by me -->
     <dependency>
       <groupId>javax.el</groupId>
       <artifactId>el-api</artifactId>
@@ -29,7 +42,6 @@
       <artifactId>jboss-jstl-api_1.2_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-  <!-- ///////////// -->
     <dependency>
       <groupId>org.hibernate.javax.persistence</groupId>
       <artifactId>hibernate-jpa-2.0-api</artifactId>
@@ -60,15 +72,22 @@
       <artifactId>jboss-jsf-api_2.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
-        <!-- JSR-303 (Bean Validation) Implementation -->
-        <!-- Provides portable constraints such as @Email -->
-        <!-- Hibernate Validator is the only JSR-303 implementation at the moment, so we can assume it's provided -->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>4.1.0.Final</version>
-            <scope>provided</scope>
-        </dependency>
+    <dependency>
+      <groupId>org.hibernate</groupId>
+      <artifactId>hibernate-validator</artifactId>
+      <version>4.1.0.Final</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.richfaces.ui</groupId>
+      <artifactId>richfaces-components-ui</artifactId>
+      <version>4.3.2.Final</version>
+    </dependency>
+    <dependency>
+      <groupId>org.richfaces.core</groupId>
+      <artifactId>richfaces-core-impl</artifactId>
+      <version>4.3.2.Final</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
@@ -79,11 +98,11 @@
   <build>
     <finalName>manyPrices</finalName>
     <plugins>
-            <plugin>
-                <groupId>org.jboss.as.plugins</groupId>
-                <artifactId>jboss-as-maven-plugin</artifactId>
-                <version>7.1.1.Final</version>
-            </plugin>
+      <plugin>
+        <groupId>org.jboss.as.plugins</groupId>
+        <artifactId>jboss-as-maven-plugin</artifactId>
+        <version>7.1.1.Final</version>
+      </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>2.3.2</version>

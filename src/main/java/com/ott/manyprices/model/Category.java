@@ -23,7 +23,7 @@ import java.util.Set;
 
 @Entity
 @NamedQueries({
-    @NamedQuery(name="findCategoryByName", query="FROM Customer c where name = :name")
+    @NamedQuery(name=Category.QUERY_FIND_BY_NAME, query="FROM Category c where c.name = :name")
 	
 })
 public class Category implements Serializable {
@@ -82,6 +82,11 @@ public class Category implements Serializable {
    public void setProducts(Set<Product> products)
    {
       this.products = products;
+   }
+   
+   public void addProduct(Product product) {
+       this.getProducts().add(product);
+       product.setCategory(this);
    }
 
    public String toString()

@@ -10,6 +10,7 @@
 
 	<f:metadata>
 		<f:viewParam name="id" value="#{sellItemBean.id}"/>
+		<f:viewParam name="productId" value="#{sellItemBean.productId}"/>
 		<f:event type="preRenderView" listener="#{sellItemBean.retrieve}"/>
 	</f:metadata>
 
@@ -57,6 +58,18 @@
 				<h:panelGroup>
 					<h:inputText id="sellItemBeanSellItemQuantitee" value="#{sellItemBean.sellItem.quantitee}"/>
 					<h:message for="sellItemBeanSellItemQuantitee" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="sellItemBeanSellItemUnitPrice" value="#{msgSI.unitPrice}:"/>
+				<h:panelGroup>
+					<h:inputText id="sellItemBeanSellItemUnitPrice" value="#{sellItemBean.sellItem.unitPrice}"/>
+					<h:message for="sellItemBeanSellItemUnitPrice" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="sellItemBeanSellItemRemarque" value="#{msgSI.remarque}:"/>
+				<h:panelGroup>
+					<h:inputText id="sellItemBeanSellItemRemarque" value="#{sellItemBean.sellItem.remarque}"/>
+					<h:message for="sellItemBeanSellItemRemarque" styleClass="error"/>
 				</h:panelGroup>
 				<h:outputText/>
 			</h:panelGrid>

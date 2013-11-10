@@ -27,7 +27,7 @@ public class ProductPrice extends Price implements Serializable {
       @OneToOne(fetch=FetchType.LAZY)
       private Product product;   
       //@NotNull
-      @OneToOne(fetch=FetchType.EAGER)
+      @OneToOne(fetch=FetchType.LAZY)
       private Customer customer;
       private float price;
       

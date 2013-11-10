@@ -8,6 +8,7 @@
 
 	<f:metadata>
 		<f:viewParam name="page" value="#{customerBean.page}"/>
+		<f:viewParam name="pageSize" value="#{customerBean.pageSize}"/>
 		<f:event type="preRenderView" listener="#{customerBean.paginate}"/>
 	</f:metadata>
 

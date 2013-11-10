@@ -63,6 +63,7 @@ public class PriceComparisonBean implements Serializable
     */
 
    private int page;
+   private int pageSize = 10;
    private long count;
    private List<Product> pageItems;
 
@@ -80,7 +81,12 @@ public class PriceComparisonBean implements Serializable
 
    public int getPageSize()
    {
-      return 10;
+      return pageSize;
+   }
+
+   public void setPageSize(int pageSize)
+   {
+      this.pageSize= pageSize;
    }
 
    public Product getExample()
