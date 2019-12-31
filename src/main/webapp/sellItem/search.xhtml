@@ -42,7 +42,7 @@
 						<h:outputLabel for="sellItemBeanDateAfter" value="#{msg.after}:"/>
 						<h:panelGroup>
 							<h:inputText id="sellItemBeanDateAfter" value="#{sellItemBean.dateAfter}">
-								<f:validateRegex pattern="(^(\s)*$)|(^[0-9]{2}-(0|1){1}[0-9]{1}-201[0-9]{1}$)"/>
+								<f:validateRegex pattern="(^(\s)*$)|(^[0-9]{2}-(0|1){1}[0-9]{1}-20[0-9]{2}$)"/>
 							</h:inputText>
 							<h:message for="sellItemBeanDateAfter" styleClass="error"/>
 						</h:panelGroup>
@@ -50,7 +50,7 @@
 						<h:outputLabel for="sellItemBeanDateBefore" value="#{msg.before}:"/>
 						<h:panelGroup>
 							<h:inputText id="sellItemBeanDateBefore" value="#{sellItemBean.dateBefore}">
-								<f:validateRegex pattern="(^(\s)*$)|(^[0-9]{2}-(0|1){1}[0-9]{1}-201[0-9]{1}$)"/>
+								<f:validateRegex pattern="(^(\s)*$)|(^[0-9]{2}-(0|1){1}[0-9]{1}-20[0-9]{2}$)"/>
 							</h:inputText>
 							<h:message for="sellItemBeanDateBefore" styleClass="error"/>
 						</h:panelGroup>
