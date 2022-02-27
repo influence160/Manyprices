@@ -132,8 +132,10 @@ public class EntryBean implements Serializable
 
    public String update()
    {
+      Product product = entry.getProduct();
+      product.getPurchasePrice().setPrice(entry.getPrice());
+      this.entityManager.merge(product);
       this.conversation.end();
-
       try
       {
          if (this.id == null)

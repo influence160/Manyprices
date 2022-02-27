@@ -17,25 +17,11 @@
 	<ui:param name="pageTitle" value="Create SellItem"/>
 
 	<ui:define name="header">
-		<c:choose>
-			<c:when test="#{!empty sellItemBean.id}">
-				#{msgSI['header.edit']}
-			</c:when>
-			<c:otherwise>
-				#{msgSI['header.create']}
-			</c:otherwise>
-		</c:choose>
+		#{msgSI['header.edit']}
 	</ui:define>
 
 	<ui:define name="subheader">
-		<c:choose>
-			<c:when test="#{!empty sellItemBean.id}">
-				Edit existing SellItem
-			</c:when>
-			<c:otherwise>
-				Create a new SellItem
-			</c:otherwise>
-		</c:choose>
+		Edit existing SellItem
 	</ui:define>
 
 	<ui:define name="footer"/>
@@ -49,7 +35,7 @@
 				<h:panelGroup>
 					<h:selectOneMenu converter="#{productBean.converter}" id="sellItemBeanSellItemProduct" value="#{sellItemBean.sellItem.product}">
 						<f:selectItem/>
-						<f:selectItems value="#{productBean.allLazy}" var="_product" itemLabel="#{_product.name}"/>
+						<f:selectItems value="#{productBean.all}" var="_product" itemLabel="#{_product.name}"/>
 					</h:selectOneMenu>
 					<h:message for="sellItemBeanSellItemProduct" styleClass="error"/>
 				</h:panelGroup>
@@ -76,17 +62,10 @@
 
 			<div class="buttons">
 				<h:commandLink value="#{msg.save}" action="#{sellItemBean.update}" styleClass="btn btn-primary"/>
-				<c:choose>
-					<c:when test="#{!empty sellItemBean.id}">
-						<h:link value="#{msg.cancel}" outcome="view" styleClass="btn btn-primary">
-							<f:param name="id" value="#{sellItemBean.id}"/>
-						</h:link>
-						<h:commandLink value="#{msg.delete}" action="#{sellItemBean.delete}" styleClass="btn btn-primary"/>
-					</c:when>
-					<c:otherwise>
-						<h:link value="#{msg.cancel}" outcome="search" styleClass="btn btn-primary"/>
-					</c:otherwise>
-				</c:choose>
+				<h:link value="#{msg.cancel}" outcome="view" styleClass="btn btn-primary">
+					<f:param name="id" value="#{sellItemBean.id}"/>
+				</h:link>
+				<h:commandLink value="#{msg.delete}" action="#{sellItemBean.delete}" styleClass="btn btn-primary"/>
 			</div>
 		</h:form>
 	</ui:define>

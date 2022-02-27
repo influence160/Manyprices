@@ -9,7 +9,7 @@
 	<f:metadata>
 		<f:viewParam name="page" value="#{sellItemBean.page}"/>
 		<f:viewParam name="pageSize" value="#{sellItemBean.pageSize}"/>
-		<f:event type="preRenderView" listener="#{sellItemBean.paginate}"/>
+		<f:event type="preRenderView" listener="#{sellItemBean.paginate}"/> 
 	</f:metadata>
 
 	<ui:param name="pageTitle" value="Search SellItem entities"/>
@@ -34,7 +34,7 @@
 						<h:panelGroup>
 							<h:selectOneMenu converter="#{productBean.converter}" id="sellItemBeanExampleProduct" value="#{sellItemBean.example.product}">
 								<f:selectItem/>
-								<f:selectItems value="#{productBean.all}" var="_exampleProduct" itemLabel="#{_exampleProduct.name}"/>
+								<f:selectItems value="#{productBean.allLazy}" var="_exampleProduct" itemLabel="#{_exampleProduct.name}"/>
 							</h:selectOneMenu>
 							<h:message for="sellItemBeanExampleProduct" styleClass="error"/>
 						</h:panelGroup>
@@ -146,6 +146,12 @@
 			<div class="total">
 			#{msgPro['totalPrices']} : 
 			<h:outputText value="#{sellItemBean.totalPrices}" >
+				<f:convertNumber maxFractionDigits="3"/>
+			</h:outputText>
+			</div>
+			<div class="total">
+			#{msgPro['selled_count']} : 
+			<h:outputText value="#{sellItemBean.quantitees}" >
 				<f:convertNumber maxFractionDigits="3"/>
 			</h:outputText>
 			</div>

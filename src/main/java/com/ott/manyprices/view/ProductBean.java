@@ -305,6 +305,15 @@ public class ProductBean implements Serializable
 //      return this.entityManager.createQuery(criteria.select(criteria.from(Product.class))).getResultList();
        return this.entityManager.createNamedQuery(Product.QUERY_GET_ALL).getResultList();
    }
+   
+    public List<Product> getAllLazy() {
+//	CriteriaQuery<Product> criteria = this.entityManager
+//		.getCriteriaBuilder().createQuery(Product.class);
+	return (List<Product>) this.entityManager
+		.createQuery(
+			"SELECT DISTINCT p FROM Product p LEFT JOIN FETCH p.purchasePrice order by p.name asc")
+		.getResultList();
+    }
 
    @Resource
    private SessionContext sessionContext;

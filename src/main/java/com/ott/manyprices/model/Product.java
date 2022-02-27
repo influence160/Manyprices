@@ -53,7 +53,7 @@ public class Product implements Serializable
    private String dimention;
    private String description;
    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "product")
-   private ProductPrice purchasePrice;
+   private ProductPrice purchasePrice = new ProductPrice();
    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "id.product")
    private Set<CustomerPrice> prices = new HashSet<CustomerPrice>();
    @ManyToOne(fetch = FetchType.LAZY)
@@ -70,7 +70,7 @@ public class Product implements Serializable
    
    
    public Product(){
-	   setPurchasePrice(new ProductPrice());
+       purchasePrice.setProduct(this);
    }
 
    public Product(Long id) {

@@ -13,6 +13,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateful;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.Conversation;
 import javax.enterprise.context.ConversationScoped;
 import javax.enterprise.context.SessionScoped;
@@ -171,6 +172,7 @@ public class SellItemBean implements Serializable {
     private int page;
     private int pageSize = 100;
     private long count;
+    private int quantitees;
     private double totalPrices;
     private List<SellItem> pageItems;
 
@@ -290,6 +292,13 @@ public class SellItemBean implements Serializable {
 	    TypedQuery<Object> tq = this.entityManager
 		    .createQuery(totalPricesCriteria);
 	    this.totalPrices = (Double) tq.getSingleResult();
+	    
+	    CriteriaQuery<Integer> quantiteesCriteria = builder.createQuery(Integer.class);
+	    root = quantiteesCriteria.from(SellItem.class);
+	    quantiteesCriteria = quantiteesCriteria.select(builder.sum(root.<Integer> get("quantitee"))).where(
+		getSearchPredicates(root));
+	    this.quantitees = this.entityManager.createQuery(quantiteesCriteria)
+		.getSingleResult();
 	} else {
 	    this.totalPrices = 0;
 	}
@@ -355,6 +364,10 @@ public class SellItemBean implements Serializable {
 
     public double getTotalPrices() {
         return this.totalPrices;
+    }
+
+    public int getQuantitees() {
+        return quantitees;
     }
     
     /*

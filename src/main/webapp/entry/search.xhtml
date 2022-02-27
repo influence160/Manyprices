@@ -34,7 +34,7 @@
 						<h:panelGroup>
 							<h:selectOneMenu converter="#{productBean.converter}" id="entryBeanExampleProduct" value="#{entryBean.example.product}">
 								<f:selectItem/>
-								<f:selectItems value="#{productBean.all}" var="_exampleProduct" itemLabel="#{_exampleProduct.name}"/>
+								<f:selectItems value="#{productBean.allLazy}" var="_exampleProduct" itemLabel="#{_exampleProduct.name}"/>
 							</h:selectOneMenu>
 							<h:message for="entryBeanExampleProduct" styleClass="error"/>
 						</h:panelGroup>
