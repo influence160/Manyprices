@@ -1,0 +1,1 @@
+mysql -u root manyprices < sauvgarde_donnees.sql

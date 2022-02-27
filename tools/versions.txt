@@ -1,0 +1,5 @@
+JBoss AS 7.1.1.Final	https://download.jboss.org/jbossas/7.1/jboss-as-7.1.1.Final/jboss-as-7.1.1.Final.zip
+Java 1.6 SDK https://www.oracle.com/fr/java/technologies/javase-java-archive-javase6-downloads.html
+Mysql 5.0
+	mysql community server 5.0.96 https://downloads.mysql.com/archives/community/
+	mysql gui tools 5.0.17 https://downloads.mysql.com/archives/gui/

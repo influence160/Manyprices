@@ -1,0 +1,15 @@
+this files are to be copied in JBOSS_HOME/
+
+Files edit :
+standalone.conf.bat
+	added line 
+	SET "JAVA_HOME=C:\Program Files (x86)\Java\jdk1.6.0_45"
+
+logging.properties
+	edited line 
+	formatter.PATTERN.pattern=%d{HH:mm:ss,SSS} %-5p [%c] %s%E%n to formatter.PATTERN.pattern=%d{dd-MM-yyyy HH:mm:ss,SSS} %-5p [%c] %s%E%n
+
+mgmt-users.properties
+	added line 
+	admin=95333971266d87fbfa7d9963dd5e89d6
+
